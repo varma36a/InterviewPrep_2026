@@ -65,18 +65,19 @@ builder.Services.AddSwaggerGen(options =>
     }
 });
 
-// Policies must exist whenever UseAuthorization runs (Authorization:Enabled=true).
-// Register them unconditionally so [Authorize(Policy = "TenantScopePolicy")] never hits a missing policy.
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("TenantScopePolicy", policy => policy.RequireClaim("tenant_id"));
-});
-
+// When Authorization:Enabled is false, nothing below runs: no JWT, no policies, no auth middleware.
+// [Authorize] on controllers is bypassed via AllowAnonymousFilter. Set Enabled=true to turn JWT + policies back on.
 if (authorizationEnabled)
 {
     var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT key is not configured.");
-    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(options =>
+    var scheme = JwtBearerDefaults.AuthenticationScheme;
+    builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = scheme;
+            options.DefaultChallengeScheme = scheme;
+            options.DefaultForbidScheme = scheme;
+        })
+        .AddJwtBearer(scheme, options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
@@ -89,6 +90,11 @@ if (authorizationEnabled)
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
             };
         });
+
+    builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("TenantScopePolicy", policy => policy.RequireClaim("tenant_id"));
+    });
 }
 
 builder.Services.AddHealthChecks();
