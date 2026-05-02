@@ -14,7 +14,12 @@ public sealed class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Ex
         catch (Exception ex)
         {
             logger.LogError(ex, "Unhandled exception occurred");
-            context.Response.StatusCode = ex is UnauthorizedAccessException ? (int)HttpStatusCode.Unauthorized : (int)HttpStatusCode.InternalServerError;
+            context.Response.StatusCode = ex switch
+            {
+                ArgumentException => (int)HttpStatusCode.BadRequest,
+                UnauthorizedAccessException => (int)HttpStatusCode.Unauthorized,
+                _ => (int)HttpStatusCode.InternalServerError
+            };
             context.Response.ContentType = "application/json";
 
             var payload = new { success = false, error = ex.Message };

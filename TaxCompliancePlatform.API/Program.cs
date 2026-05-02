@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Serilog;
 using System.Text;
+using TaxCompliancePlatform.API.Hosting;
 using TaxCompliancePlatform.API.Middleware;
 using TaxCompliancePlatform.Application;
 using TaxCompliancePlatform.Infrastructure;
@@ -27,6 +28,10 @@ builder.Host.UseSerilog((context, loggerConfiguration) =>
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddHostedService<DevelopmentTenantBootstrapper>();
+}
 
 builder.Services.AddControllers(options =>
 {
@@ -111,6 +116,12 @@ builder.Services.AddRateLimiter(options =>
 });
 
 var app = builder.Build();
+
+// If you see 401 + WWW-Authenticate: Bearer but appsettings shows false, env may override (Authorization__Enabled).
+app.Logger.LogInformation(
+    "Authorization:Enabled computed={Computed} (Authorization:Enabled raw '{Raw}'. When true, protected routes need Bearer token from POST /api/v1/auth/login.)",
+    authorizationEnabled,
+    app.Configuration["Authorization:Enabled"] ?? "<missing>");
 
 app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();

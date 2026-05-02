@@ -12,7 +12,8 @@ public sealed class CreateTaxProfileCommandHandler(ICurrentTenantProvider curren
     {
         if (!currentTenantProvider.HasTenant)
         {
-            throw new UnauthorizedAccessException("Tenant context is missing.");
+            throw new ArgumentException(
+                "Tenant context is missing. Send HTTP header X-Tenant-Id with your tenant UUID (from POST /api/v1/auth/tenants/register), or set TenantResolution:DefaultTenantId in appsettings.Development.json for local runs without that header.");
         }
 
         var profile = new TaxProfile(
