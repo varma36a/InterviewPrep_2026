@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../buildMultiTargeting/TaxCompliancePlatform.API.props" />
-</Project>
