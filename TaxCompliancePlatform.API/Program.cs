@@ -25,11 +25,8 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers(options =>
 {
-    // Local API-only work without a client sending JWT; remove when a frontend consumes secured endpoints.
-    if (builder.Environment.IsDevelopment())
-    {
-        options.Filters.Add(new AllowAnonymousFilter());
-    }
+    // TEMP: bypass [Authorize] everywhere so you can debug without JWT. Remove this filter when securing the API again.
+    options.Filters.Add(new AllowAnonymousFilter());
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddApiVersioning(options =>
