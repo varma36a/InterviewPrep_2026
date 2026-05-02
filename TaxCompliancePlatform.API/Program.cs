@@ -1,9 +1,10 @@
 using System.Text;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Serilog;
 using TaxCompliancePlatform.API.Middleware;
 using TaxCompliancePlatform.Application;
@@ -19,10 +20,17 @@ builder.Host.UseSerilog((context, loggerConfiguration) =>
         .WriteTo.Console();
 });
 
-builder.Services.AddApplication();
+builder.Services.AddApplication();      
 builder.Services.AddInfrastructure(builder.Configuration);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    // Local API-only work without a client sending JWT; remove when a frontend consumes secured endpoints.
+    if (builder.Environment.IsDevelopment())
+    {
+        options.Filters.Add(new AllowAnonymousFilter());
+    }
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddApiVersioning(options =>
     {
@@ -42,20 +50,14 @@ builder.Services.AddSwaggerGen(options =>
     {
         Name = "Authorization",
         Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
+        Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
         Description = "Paste the accessToken from POST /api/v1/auth/login (Swagger sends it as Bearer automatically)."
     });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
     {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-            },
-            Array.Empty<string>()
-        }
+        [new OpenApiSecuritySchemeReference("Bearer", document, string.Empty)] = []
     });
 });
 
