@@ -45,15 +45,10 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
             builder.HasIndex(x => new { x.TenantId, x.TaxIdentifier, x.FiscalYear }).IsUnique();
             builder.Property(x => x.TaxIdentifier).HasMaxLength(50).IsRequired();
             builder.Property(x => x.CountryCode).HasMaxLength(2).IsRequired();
-            builder.Property(x => x.AnnualTaxableIncome).HasColumnType("decimal(18,2)");
-            builder.Property(x => x.Deductions).HasColumnType("decimal(18,2)");
         });
 
         modelBuilder.Entity<TaxComputation>(builder =>
         {
-            builder.Property(x => x.TaxableAmount).HasColumnType("decimal(18,2)");
-            builder.Property(x => x.TaxRate).HasColumnType("decimal(10,4)");
-            builder.Property(x => x.TaxLiability).HasColumnType("decimal(18,2)");
             builder.HasIndex(x => new { x.TenantId, x.TaxProfileId, x.ComputedAtUtc });
         });
 
