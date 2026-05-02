@@ -65,6 +65,13 @@ builder.Services.AddSwaggerGen(options =>
     }
 });
 
+// Policies must exist whenever UseAuthorization runs (Authorization:Enabled=true).
+// Register them unconditionally so [Authorize(Policy = "TenantScopePolicy")] never hits a missing policy.
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("TenantScopePolicy", policy => policy.RequireClaim("tenant_id"));
+});
+
 if (authorizationEnabled)
 {
     var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT key is not configured.");
@@ -82,11 +89,6 @@ if (authorizationEnabled)
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
             };
         });
-
-    builder.Services.AddAuthorization(options =>
-    {
-        options.AddPolicy("TenantScopePolicy", policy => policy.RequireClaim("tenant_id"));
-    });
 }
 
 builder.Services.AddHealthChecks();
