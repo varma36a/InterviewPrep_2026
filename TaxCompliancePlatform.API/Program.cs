@@ -12,7 +12,10 @@ using TaxCompliancePlatform.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var authorizationEnabled = builder.Configuration.GetValue("Authorization:Enabled", false);
+bool AuthorizationEnabled(IConfiguration cfg) =>
+    bool.TryParse(cfg["Authorization:Enabled"], out var enabled) && enabled;
+
+var authorizationEnabled = AuthorizationEnabled(builder.Configuration);
 
 builder.Host.UseSerilog((context, loggerConfiguration) =>
 {
@@ -65,37 +68,36 @@ builder.Services.AddSwaggerGen(options =>
     }
 });
 
-// When Authorization:Enabled is false, nothing below runs: no JWT, no policies, no auth middleware.
-// [Authorize] on controllers is bypassed via AllowAnonymousFilter. Set Enabled=true to turn JWT + policies back on.
-if (authorizationEnabled)
+// Policies for [Authorize] when the authorization middleware is enabled below.
+builder.Services.AddAuthorization(options =>
 {
-    var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT key is not configured.");
-    var scheme = JwtBearerDefaults.AuthenticationScheme;
-    builder.Services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = scheme;
-            options.DefaultChallengeScheme = scheme;
-            options.DefaultForbidScheme = scheme;
-        })
-        .AddJwtBearer(scheme, options =>
-        {
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateIssuerSigningKey = true,
-                ValidateLifetime = true,
-                ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                ValidAudience = builder.Configuration["Jwt:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
-            };
-        });
+    options.AddPolicy("TenantScopePolicy", policy => policy.RequireClaim("tenant_id"));
+});
 
-    builder.Services.AddAuthorization(options =>
+// Register JWT schemes in DI regardless of Authorization:Enabled so ChallengeAsync never hits a missing DefaultChallengeScheme
+// if anything in the pipeline still invokes authentication (ordering, hosting, or future middleware).
+// Only UseAuthentication/UseAuthorization are toggled by Authorization:Enabled.
+var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT key is not configured.");
+var bearerScheme = JwtBearerDefaults.AuthenticationScheme;
+builder.Services.AddAuthentication(options =>
     {
-        options.AddPolicy("TenantScopePolicy", policy => policy.RequireClaim("tenant_id"));
+        options.DefaultAuthenticateScheme = bearerScheme;
+        options.DefaultChallengeScheme = bearerScheme;
+        options.DefaultForbidScheme = bearerScheme;
+    })
+    .AddJwtBearer(bearerScheme, options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            ValidateLifetime = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        };
     });
-}
 
 builder.Services.AddHealthChecks();
 builder.Services.AddRateLimiter(options =>
