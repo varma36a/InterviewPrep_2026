@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/TaxCompliancePlatform.API.props" />
+</Project>

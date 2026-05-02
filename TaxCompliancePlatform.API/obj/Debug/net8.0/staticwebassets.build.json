@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "SM2OnXwzsXcjLzUZ+0Z7juLGQnBZwP1LYRu3P8VOXv8=",
+  "Source": "TaxCompliancePlatform.API",
+  "BasePath": "_content/TaxCompliancePlatform.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

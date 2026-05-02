@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: TaxCompliancePlatform.API/Dockerfile
+    container_name: tcp-api
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_ENVIRONMENT: Development
+    depends_on:
+      - sqlserver
+      - redis
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: tcp-sqlserver
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Your_strong_password123"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+  redis:
+    image: redis:7
+    container_name: tcp-redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  sqlserver-data:

@@ -1,0 +1,12 @@
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Domain/bin/Debug/net8.0/TaxCompliancePlatform.Domain.deps.json
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Domain/bin/Debug/net8.0/TaxCompliancePlatform.Domain.dll
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Domain/bin/Debug/net8.0/TaxCompliancePlatform.Domain.pdb
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Domain/obj/Debug/net8.0/TaxCompliancePlatform.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Domain/obj/Debug/net8.0/TaxCompliancePlatform.Domain.AssemblyInfoInputs.cache
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Domain/obj/Debug/net8.0/TaxCompliancePlatform.Domain.AssemblyInfo.cs
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Domain/obj/Debug/net8.0/TaxCompliancePlatform.Domain.csproj.CoreCompileInputs.cache
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Domain/obj/Debug/net8.0/TaxCompliancePlatform.Domain.sourcelink.json
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Domain/obj/Debug/net8.0/TaxCompliancePlatform.Domain.dll
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Domain/obj/Debug/net8.0/refint/TaxCompliancePlatform.Domain.dll
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Domain/obj/Debug/net8.0/TaxCompliancePlatform.Domain.pdb
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Domain/obj/Debug/net8.0/ref/TaxCompliancePlatform.Domain.dll

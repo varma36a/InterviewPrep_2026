@@ -1,0 +1,12 @@
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Shared/bin/Debug/net8.0/TaxCompliancePlatform.Shared.deps.json
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Shared/bin/Debug/net8.0/TaxCompliancePlatform.Shared.dll
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Shared/bin/Debug/net8.0/TaxCompliancePlatform.Shared.pdb
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Shared/obj/Debug/net8.0/TaxCompliancePlatform.Shared.GeneratedMSBuildEditorConfig.editorconfig
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Shared/obj/Debug/net8.0/TaxCompliancePlatform.Shared.AssemblyInfoInputs.cache
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Shared/obj/Debug/net8.0/TaxCompliancePlatform.Shared.AssemblyInfo.cs
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Shared/obj/Debug/net8.0/TaxCompliancePlatform.Shared.csproj.CoreCompileInputs.cache
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Shared/obj/Debug/net8.0/TaxCompliancePlatform.Shared.sourcelink.json
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Shared/obj/Debug/net8.0/TaxCompliancePlatform.Shared.dll
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Shared/obj/Debug/net8.0/refint/TaxCompliancePlatform.Shared.dll
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Shared/obj/Debug/net8.0/TaxCompliancePlatform.Shared.pdb
+/Users/RohithGVMac/InterviewPrep_2026/TaxCompliancePlatform.Shared/obj/Debug/net8.0/ref/TaxCompliancePlatform.Shared.dll
