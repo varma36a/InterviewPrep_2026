@@ -6,7 +6,7 @@ namespace TaxCompliancePlatform.Application.Services.TaxProfiles;
 
 public interface ITaxProfileService
 {
-    Task<IReadOnlyCollection<TaxProfileDto>> GetTaxProfilesAsync(
+    Task<CursorPagedResponse<TaxProfileDto>> GetTaxProfilesAsync(
         ApplicationServiceRequest<GetTaxProfilesQuery> request,
         CancellationToken cancellationToken);
 

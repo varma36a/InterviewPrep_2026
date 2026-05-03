@@ -10,7 +10,7 @@ public interface IDominoFranchiseTaxService
         ApplicationServiceRequest<CreateDominoFranchiseSalesOrderCommand> request,
         CancellationToken cancellationToken);
 
-    Task<IReadOnlyCollection<DominoFranchiseSalesOrderDto>> GetSalesOrdersAsync(
+    Task<CursorPagedResponse<DominoFranchiseSalesOrderDto>> GetSalesOrdersAsync(
         ApplicationServiceRequest<GetDominoFranchiseSalesOrdersQuery> request,
         CancellationToken cancellationToken);
 }

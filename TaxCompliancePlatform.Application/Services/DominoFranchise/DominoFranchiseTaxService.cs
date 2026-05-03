@@ -25,7 +25,7 @@ public sealed class DominoFranchiseTaxService(
         return await mediator.Send(request.Command, cancellationToken);
     }
 
-    public async Task<IReadOnlyCollection<DominoFranchiseSalesOrderDto>> GetSalesOrdersAsync(
+    public async Task<CursorPagedResponse<DominoFranchiseSalesOrderDto>> GetSalesOrdersAsync(
         ApplicationServiceRequest<GetDominoFranchiseSalesOrdersQuery> request,
         CancellationToken cancellationToken)
     {

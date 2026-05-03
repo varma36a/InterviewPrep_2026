@@ -1,9 +1,10 @@
 using MediatR;
+using TaxCompliancePlatform.Application.Common;
 
 namespace TaxCompliancePlatform.Application.Handlers.DominoFranchise.GetDominoFranchiseSalesOrders;
 
-public sealed record GetDominoFranchiseSalesOrdersQuery(int PageNumber = 1, int PageSize = 20)
-    : IRequest<IReadOnlyCollection<DominoFranchiseSalesOrderDto>>;
+public sealed record GetDominoFranchiseSalesOrdersQuery(string? Cursor, int Limit = 20)
+    : IRequest<CursorPagedResponse<DominoFranchiseSalesOrderDto>>;
 
 public sealed record DominoFranchiseSalesOrderDto(
     Guid Id,

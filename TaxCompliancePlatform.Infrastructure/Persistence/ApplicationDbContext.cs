@@ -4,8 +4,16 @@ using TaxCompliancePlatform.Domain.Entities;
 
 namespace TaxCompliancePlatform.Infrastructure.Persistence;
 
-public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options), IApplicationDbContext, IUnitOfWork
+public sealed class ApplicationDbContext : DbContext, IApplicationDbContext, IUnitOfWork
 {
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
+    {
+        // Standalone MongoDB (no replica set) does not support multi-document transactions.
+        // Required for MongoDB EF Core when not using a replica set or load-balanced deployment.
+        Database.AutoTransactionBehavior = AutoTransactionBehavior.Never;
+    }
+
     public DbSet<Tenant> Tenants => Set<Tenant>();
     public DbSet<User> Users => Set<User>();
     public DbSet<UserRole> UserRoles => Set<UserRole>();

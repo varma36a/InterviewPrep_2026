@@ -12,7 +12,7 @@ public sealed class TaxProfileService(
     IRequestExecutionContext executionContext,
     ILogger<TaxProfileService> logger) : ITaxProfileService
 {
-    public async Task<IReadOnlyCollection<TaxProfileDto>> GetTaxProfilesAsync(
+    public async Task<CursorPagedResponse<TaxProfileDto>> GetTaxProfilesAsync(
         ApplicationServiceRequest<GetTaxProfilesQuery> request,
         CancellationToken cancellationToken)
     {

@@ -32,17 +32,18 @@ public sealed class DominoFranchiseTaxController(
         return CreatedAtAction(nameof(RecordSalesOrder), new { id }, new { id });
     }
 
+    /// <summary>Keyset pagination: omit <paramref name="cursor"/> for the first page; use <c>nextCursor</c> from the prior response for the next.</summary>
     [HttpGet("sales-orders")]
     public async Task<IActionResult> ListSalesOrders(
-        int pageNumber = 1,
-        int pageSize = 20,
+        string? cursor = null,
+        int limit = 20,
         CancellationToken cancellationToken = default)
     {
-        var items = await dominoFranchiseTaxService.GetSalesOrdersAsync(
+        var result = await dominoFranchiseTaxService.GetSalesOrdersAsync(
             new ApplicationServiceRequest<GetDominoFranchiseSalesOrdersQuery>(
                 executionContext.CorrelationId,
-                new GetDominoFranchiseSalesOrdersQuery(pageNumber, pageSize)),
+                new GetDominoFranchiseSalesOrdersQuery(cursor, limit)),
             cancellationToken);
-        return Ok(items);
+        return Ok(result);
     }
 }

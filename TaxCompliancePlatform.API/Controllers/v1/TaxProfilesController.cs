@@ -15,15 +15,16 @@ namespace TaxCompliancePlatform.API.Controllers.v1;
 public sealed class TaxProfilesController(ITaxProfileService taxProfileService, IRequestExecutionContext executionContext)
     : ControllerBase
 {
+    /// <summary>Keyset pagination: omit <paramref name="cursor"/> for the first page; use <c>nextCursor</c> from the prior response for the next.</summary>
     [HttpGet]
-    public async Task<IActionResult> Get(int pageNumber = 1, int pageSize = 20, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> Get(string? cursor = null, int limit = 20, CancellationToken cancellationToken = default)
     {
-        var items = await taxProfileService.GetTaxProfilesAsync(
+        var result = await taxProfileService.GetTaxProfilesAsync(
             new ApplicationServiceRequest<GetTaxProfilesQuery>(
                 executionContext.CorrelationId,
-                new GetTaxProfilesQuery(pageNumber, pageSize)),
+                new GetTaxProfilesQuery(cursor, limit)),
             cancellationToken);
-        return Ok(items);
+        return Ok(result);
     }
 
     [HttpPost]
