@@ -7,6 +7,7 @@ using TaxCompliancePlatform.API.Hosting;
 using TaxCompliancePlatform.API.Middleware;
 using TaxCompliancePlatform.API.Swagger;
 using TaxCompliancePlatform.Application;
+using TaxCompliancePlatform.Application.Abstractions.CurrentUser;
 using TaxCompliancePlatform.Application.Providers.Correlation;
 using TaxCompliancePlatform.Application.Providers.Execution;
 using TaxCompliancePlatform.API.Execution;
@@ -31,6 +32,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<HttpRequestExecutionContext>();
 builder.Services.AddScoped<ICorrelationContext>(sp => sp.GetRequiredService<HttpRequestExecutionContext>());
 builder.Services.AddScoped<IRequestExecutionContext>(sp => sp.GetRequiredService<HttpRequestExecutionContext>());
+builder.Services.AddScoped<ICurrentUserAccessor, HttpCurrentUserAccessor>();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 if (builder.Environment.IsDevelopment())

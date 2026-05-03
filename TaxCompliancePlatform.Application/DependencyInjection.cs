@@ -5,6 +5,7 @@ using TaxCompliancePlatform.Application.Managers.Auth;
 using TaxCompliancePlatform.Application.Managers.Domino;
 using TaxCompliancePlatform.Application.Managers.Tenants;
 using TaxCompliancePlatform.Application.Pipeline;
+using TaxCompliancePlatform.Application.Services.Account;
 using TaxCompliancePlatform.Application.Services.Auth;
 using TaxCompliancePlatform.Application.Services.DominoFranchise;
 using TaxCompliancePlatform.Application.Services.TaxProfiles;
@@ -22,6 +23,7 @@ public static class DependencyInjection
         });
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 
+        services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITaxProfileService, TaxProfileService>();
         services.AddScoped<IDominoFranchiseTaxService, DominoFranchiseTaxService>();

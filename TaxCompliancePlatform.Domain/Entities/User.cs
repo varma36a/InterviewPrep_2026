@@ -24,4 +24,18 @@ public sealed class User : BaseEntity
         FullName = fullName;
         PasswordHash = passwordHash;
     }
+
+    /// <summary>Partial update: email only (normalized to lower-case invariant).</summary>
+    public void UpdateEmail(string email)
+    {
+        var normalized = email?.Trim().ToLowerInvariant()
+            ?? throw new ArgumentException("Email is required.", nameof(email));
+        if (string.IsNullOrWhiteSpace(normalized))
+        {
+            throw new ArgumentException("Email is required.", nameof(email));
+        }
+
+        Email = normalized;
+        Touch();
+    }
 }
