@@ -1,4 +1,4 @@
-using TaxCompliancePlatform.Application.Features.Auth.Commands.RegisterTenant;
+using TaxCompliancePlatform.Application.Handlers.Auth.RegisterTenant;
 
 namespace TaxCompliancePlatform.UnitTests;
 

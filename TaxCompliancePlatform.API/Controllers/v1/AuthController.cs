@@ -1,27 +1,33 @@
 using Asp.Versioning;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TaxCompliancePlatform.Application.Features.Auth.Commands.Login;
-using TaxCompliancePlatform.Application.Features.Auth.Commands.RegisterTenant;
+using TaxCompliancePlatform.Application.Common;
+using TaxCompliancePlatform.Application.Handlers.Auth.Login;
+using TaxCompliancePlatform.Application.Handlers.Auth.RegisterTenant;
+using TaxCompliancePlatform.Application.Providers.Correlation;
+using TaxCompliancePlatform.Application.Services.Auth;
 
 namespace TaxCompliancePlatform.API.Controllers.v1;
 
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/auth")]
-public sealed class AuthController(IMediator mediator) : ControllerBase
+public sealed class AuthController(IAuthService authService, ICorrelationContext correlationContext) : ControllerBase
 {
     [HttpPost("tenants/register")]
     public async Task<IActionResult> RegisterTenant([FromBody] RegisterTenantCommand command, CancellationToken cancellationToken)
     {
-        var tenantId = await mediator.Send(command, cancellationToken);
+        var tenantId = await authService.RegisterTenantAsync(
+            new ApplicationServiceRequest<RegisterTenantCommand>(correlationContext.CorrelationId, command),
+            cancellationToken);
         return CreatedAtAction(nameof(RegisterTenant), new { tenantId }, new { tenantId });
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginCommand command, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(command, cancellationToken);
+        var result = await authService.LoginAsync(
+            new ApplicationServiceRequest<LoginCommand>(correlationContext.CorrelationId, command),
+            cancellationToken);
         return Ok(result);
     }
 }

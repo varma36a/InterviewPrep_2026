@@ -6,9 +6,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Serilog;
 using System.Text;
+using TaxCompliancePlatform.API.Correlation;
 using TaxCompliancePlatform.API.Hosting;
 using TaxCompliancePlatform.API.Middleware;
 using TaxCompliancePlatform.Application;
+using TaxCompliancePlatform.Application.Providers.Correlation;
 using TaxCompliancePlatform.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +28,8 @@ builder.Host.UseSerilog((context, loggerConfiguration) =>
         .WriteTo.Console();
 });
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICorrelationContext, HttpCorrelationContext>();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 if (builder.Environment.IsDevelopment())
