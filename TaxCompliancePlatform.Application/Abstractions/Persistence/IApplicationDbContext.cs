@@ -13,5 +13,6 @@ public interface IApplicationDbContext
     DbSet<TaxComputation> TaxComputations { get; }
     DbSet<RefreshToken> RefreshTokens { get; }
     DbSet<AuditLog> AuditLogs { get; }
+    DbSet<DominoFranchiseSalesOrder> DominoFranchiseSalesOrders { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

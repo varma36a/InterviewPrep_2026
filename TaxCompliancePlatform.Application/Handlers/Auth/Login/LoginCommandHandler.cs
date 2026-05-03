@@ -3,7 +3,7 @@ using TaxCompliancePlatform.Application.Abstractions.Authentication;
 using TaxCompliancePlatform.Application.Abstractions.Persistence;
 using TaxCompliancePlatform.Application.Handlers.Auth.Common;
 using TaxCompliancePlatform.Application.Managers.Auth;
-using TaxCompliancePlatform.Application.Providers.Correlation;
+using TaxCompliancePlatform.Application.Providers.Execution;
 using TaxCompliancePlatform.Domain.Entities;
 
 namespace TaxCompliancePlatform.Application.Handlers.Auth.Login;
@@ -13,16 +13,16 @@ public sealed class LoginCommandHandler(
     IJwtTokenService jwtTokenService,
     IRepository<RefreshToken> refreshTokenRepository,
     IUnitOfWork unitOfWork,
-    ICorrelationContext correlationContext)
+    IRequestExecutionContext executionContext)
     : IRequestHandler<LoginCommand, AuthResponse>
 {
     public async Task<AuthResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         var (user, roles) = await loginAuthenticationManager.ValidateCredentialsAsync(request, cancellationToken);
 
-        var correlationId = string.IsNullOrWhiteSpace(correlationContext.CorrelationId)
+        var correlationId = string.IsNullOrWhiteSpace(executionContext.CorrelationId)
             ? Guid.NewGuid().ToString("N")
-            : correlationContext.CorrelationId;
+            : executionContext.CorrelationId;
 
         var accessToken = jwtTokenService.GenerateAccessToken(user, roles, user.TenantId, correlationId);
         var refreshToken = jwtTokenService.GenerateRefreshToken();

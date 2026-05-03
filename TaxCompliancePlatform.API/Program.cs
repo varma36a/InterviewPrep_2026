@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.OpenApi;
 using Serilog;
-using TaxCompliancePlatform.API.Correlation;
 using TaxCompliancePlatform.API.Hosting;
 using TaxCompliancePlatform.API.Middleware;
 using TaxCompliancePlatform.API.Swagger;
 using TaxCompliancePlatform.Application;
 using TaxCompliancePlatform.Application.Providers.Correlation;
+using TaxCompliancePlatform.Application.Providers.Execution;
+using TaxCompliancePlatform.API.Execution;
 using TaxCompliancePlatform.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +28,9 @@ builder.Host.UseSerilog((context, loggerConfiguration) =>
 });
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<ICorrelationContext, HttpCorrelationContext>();
+builder.Services.AddScoped<HttpRequestExecutionContext>();
+builder.Services.AddScoped<ICorrelationContext>(sp => sp.GetRequiredService<HttpRequestExecutionContext>());
+builder.Services.AddScoped<IRequestExecutionContext>(sp => sp.GetRequiredService<HttpRequestExecutionContext>());
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 if (builder.Environment.IsDevelopment())
@@ -57,7 +60,13 @@ builder.Services.AddApiVersioning(options =>
 var oauth2Enabled = builder.Configuration.GetValue("OAuth2:Enabled", false);
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Tax Compliance Platform API", Version = "v1" });
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Tax Compliance Platform API",
+        Version = "v1",
+        Description =
+            "Domino's franchise scenario: optional headers X-Domino-Store-Code, X-Domino-Market, X-Domino-Channel (Carryout|Delivery); defaults from DominoScenario in appsettings. Correlation uses X-Correlation-Id."
+    });
     if (authorizationEnabled)
     {
         var bearerDescription = oauth2Enabled
@@ -108,9 +117,10 @@ app.Logger.LogInformation(
 
 app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseMiddleware<SecureHeadersMiddleware>();
 app.UseMiddleware<TenantResolutionMiddleware>();
+app.UseMiddleware<ExecutionContextMiddleware>();
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

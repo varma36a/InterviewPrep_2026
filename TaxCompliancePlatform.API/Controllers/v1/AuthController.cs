@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using TaxCompliancePlatform.Application.Common;
 using TaxCompliancePlatform.Application.Handlers.Auth.Login;
 using TaxCompliancePlatform.Application.Handlers.Auth.RegisterTenant;
-using TaxCompliancePlatform.Application.Providers.Correlation;
+using TaxCompliancePlatform.Application.Providers.Execution;
 using TaxCompliancePlatform.Application.Services.Auth;
 
 namespace TaxCompliancePlatform.API.Controllers.v1;
@@ -13,13 +13,13 @@ namespace TaxCompliancePlatform.API.Controllers.v1;
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/auth")]
 [AllowAnonymous]
-public sealed class AuthController(IAuthService authService, ICorrelationContext correlationContext) : ControllerBase
+public sealed class AuthController(IAuthService authService, IRequestExecutionContext executionContext) : ControllerBase
 {
     [HttpPost("tenants/register")]
     public async Task<IActionResult> RegisterTenant([FromBody] RegisterTenantCommand command, CancellationToken cancellationToken)
     {
         var tenantId = await authService.RegisterTenantAsync(
-            new ApplicationServiceRequest<RegisterTenantCommand>(correlationContext.CorrelationId, command),
+            new ApplicationServiceRequest<RegisterTenantCommand>(executionContext.CorrelationId, command),
             cancellationToken);
         return CreatedAtAction(nameof(RegisterTenant), new { tenantId }, new { tenantId });
     }
@@ -28,7 +28,7 @@ public sealed class AuthController(IAuthService authService, ICorrelationContext
     public async Task<IActionResult> Login([FromBody] LoginCommand command, CancellationToken cancellationToken)
     {
         var result = await authService.LoginAsync(
-            new ApplicationServiceRequest<LoginCommand>(correlationContext.CorrelationId, command),
+            new ApplicationServiceRequest<LoginCommand>(executionContext.CorrelationId, command),
             cancellationToken);
         return Ok(result);
     }

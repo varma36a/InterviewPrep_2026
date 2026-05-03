@@ -1,40 +1,43 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using TaxCompliancePlatform.Application.Common;
-using TaxCompliancePlatform.Application.Handlers.TaxProfiles.CreateTaxProfile;
-using TaxCompliancePlatform.Application.Handlers.TaxProfiles.GetTaxProfiles;
+using TaxCompliancePlatform.Application.Handlers.DominoFranchise.CreateDominoFranchiseSalesOrder;
+using TaxCompliancePlatform.Application.Handlers.DominoFranchise.GetDominoFranchiseSalesOrders;
 using TaxCompliancePlatform.Application.Providers.Execution;
 
-namespace TaxCompliancePlatform.Application.Services.TaxProfiles;
+namespace TaxCompliancePlatform.Application.Services.DominoFranchise;
 
-public sealed class TaxProfileService(
+public sealed class DominoFranchiseTaxService(
     IMediator mediator,
     IRequestExecutionContext executionContext,
-    ILogger<TaxProfileService> logger) : ITaxProfileService
+    ILogger<DominoFranchiseTaxService> logger) : IDominoFranchiseTaxService
 {
-    public async Task<IReadOnlyCollection<TaxProfileDto>> GetTaxProfilesAsync(
-        ApplicationServiceRequest<GetTaxProfilesQuery> request,
+    public async Task<Guid> RecordSalesOrderAsync(
+        ApplicationServiceRequest<CreateDominoFranchiseSalesOrderCommand> request,
         CancellationToken cancellationToken)
     {
         EnsureCorrelationMatchesAmbient(request.CorrelationId);
-        using var scope = logger.BeginScope(BuildScope(request.CorrelationId));
-        logger.LogDebug("Orchestrating {Query}", nameof(GetTaxProfilesQuery));
+        using var scope = logger.BeginScope(BuildScope());
+        logger.LogInformation(
+            "Orchestrating Domino franchise sales order for store {Store} market {Market}",
+            executionContext.DominoStoreCode,
+            executionContext.DominoMarketRegion);
         return await mediator.Send(request.Command, cancellationToken);
     }
 
-    public async Task<Guid> CreateTaxProfileAsync(
-        ApplicationServiceRequest<CreateTaxProfileCommand> request,
+    public async Task<IReadOnlyCollection<DominoFranchiseSalesOrderDto>> GetSalesOrdersAsync(
+        ApplicationServiceRequest<GetDominoFranchiseSalesOrdersQuery> request,
         CancellationToken cancellationToken)
     {
         EnsureCorrelationMatchesAmbient(request.CorrelationId);
-        using var scope = logger.BeginScope(BuildScope(request.CorrelationId));
-        logger.LogDebug("Orchestrating {Command}", nameof(CreateTaxProfileCommand));
+        using var scope = logger.BeginScope(BuildScope());
+        logger.LogInformation("Orchestrating Domino franchise sales order list");
         return await mediator.Send(request.Command, cancellationToken);
     }
 
-    private Dictionary<string, object?> BuildScope(string correlationFromRequest) => new()
+    private Dictionary<string, object?> BuildScope() => new()
     {
-        ["CorrelationId"] = correlationFromRequest,
+        ["CorrelationId"] = executionContext.CorrelationId,
         ["TenantId"] = executionContext.TenantId,
         ["DominoStoreCode"] = executionContext.DominoStoreCode,
         ["DominoMarketRegion"] = executionContext.DominoMarketRegion,

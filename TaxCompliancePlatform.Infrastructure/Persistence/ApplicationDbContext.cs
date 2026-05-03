@@ -14,6 +14,7 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     public DbSet<TaxComputation> TaxComputations => Set<TaxComputation>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+    public DbSet<DominoFranchiseSalesOrder> DominoFranchiseSalesOrders => Set<DominoFranchiseSalesOrder>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -65,6 +66,15 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
             builder.Property(x => x.Resource).HasMaxLength(200).IsRequired();
             builder.Property(x => x.CorrelationId).HasMaxLength(64).IsRequired();
             builder.HasIndex(x => new { x.TenantId, x.CreatedAtUtc });
+        });
+
+        modelBuilder.Entity<DominoFranchiseSalesOrder>(builder =>
+        {
+            builder.HasIndex(x => new { x.TenantId, x.StoreCode, x.CreatedAtUtc });
+            builder.Property(x => x.StoreCode).HasMaxLength(32).IsRequired();
+            builder.Property(x => x.MarketRegion).HasMaxLength(64).IsRequired();
+            builder.Property(x => x.CustomerOrderReference).HasMaxLength(40).IsRequired();
+            builder.Property(x => x.CorrelationId).HasMaxLength(64).IsRequired();
         });
     }
 }
