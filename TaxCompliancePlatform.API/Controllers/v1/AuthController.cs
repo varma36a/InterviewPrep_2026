@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaxCompliancePlatform.Application.Common;
 using TaxCompliancePlatform.Application.Handlers.Auth.Login;
@@ -11,6 +12,7 @@ namespace TaxCompliancePlatform.API.Controllers.v1;
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/auth")]
+[AllowAnonymous]
 public sealed class AuthController(IAuthService authService, ICorrelationContext correlationContext) : ControllerBase
 {
     [HttpPost("tenants/register")]
