@@ -1,0 +1,93 @@
+<main class="page">
+  <header>
+    <h1>{{ title }}</h1>
+    <p>Angular client for `api/v1` endpoints in TaxCompliancePlatform.API.</p>
+  </header>
+
+  <section class="panel">
+    <h2>Auth</h2>
+    <div class="field-grid">
+      <label>
+        Tenant Name
+        <input [(ngModel)]="registerTenantForm.tenantName" name="tenantName" />
+      </label>
+      <label>
+        Admin Email
+        <input [(ngModel)]="registerTenantForm.adminEmail" name="adminEmail" />
+      </label>
+      <label>
+        Admin Password
+        <input [(ngModel)]="registerTenantForm.adminPassword" name="adminPassword" type="password" />
+      </label>
+      <label>
+        Country Code
+        <input [(ngModel)]="registerTenantForm.countryCode" name="countryCode" />
+      </label>
+    </div>
+    <div class="actions">
+      <button (click)="registerTenant()" [disabled]="isLoading()">Register Tenant</button>
+      <button (click)="login()" [disabled]="isLoading()">Login</button>
+    </div>
+    <div class="field-grid">
+      <label>
+        Login Email
+        <input [(ngModel)]="loginForm.email" name="loginEmail" />
+      </label>
+      <label>
+        Login Password
+        <input [(ngModel)]="loginForm.password" name="loginPassword" type="password" />
+      </label>
+    </div>
+    <label>
+      Bearer Token
+      <textarea [(ngModel)]="token" name="accessToken" rows="2"></textarea>
+    </label>
+  </section>
+
+  <section class="panel">
+    <h2>Account</h2>
+    <label>
+      New Email
+      <input [(ngModel)]="patchEmailForm.email" name="patchEmail" />
+    </label>
+    <div class="actions">
+      <button (click)="patchEmail()" [disabled]="isLoading()">PATCH /account/email</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Tax Profiles</h2>
+    <label>
+      Sample Payload
+      <textarea [(ngModel)]="taxProfile.taxIdentifier" name="taxIdentifier"></textarea>
+    </label>
+    <div class="actions">
+      <button (click)="getTaxProfiles()" [disabled]="isLoading()">GET /tax-profiles</button>
+      <button (click)="createTaxProfile()" [disabled]="isLoading()">POST /tax-profiles</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Domino Franchise Tax</h2>
+    <label>
+      Customer Order Reference
+      <input [(ngModel)]="salesOrder.CustomerOrderReference" name="CustomerOrderReference" />
+    </label>
+    <label>
+      Pre Tax Amount
+      <input [(ngModel)]="salesOrder.PretaxAmount" name="PretaxAmount" type="number" />
+    </label>
+    <div class="actions">
+      <button (click)="listSalesOrders()" [disabled]="isLoading()">GET /domino/franchise-tax/sales-orders</button>
+      <button (click)="createSalesOrder()" [disabled]="isLoading()">POST /domino/franchise-tax/sales-orders</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Response</h2>
+    @if (lastError()) {
+      <p class="error">{{ lastError() }}</p>
+    }
+    <pre>{{ lastResponse() | json }}</pre>
+  </section>
+</main>
