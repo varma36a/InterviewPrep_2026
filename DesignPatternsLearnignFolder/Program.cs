@@ -8,5 +8,5 @@ Console.WriteLine("C# Design Patterns - Real-time Examples");
 Console.WriteLine(new string('=', 50));
 
 CreationalPatternsDemo.Run();
-StructuralPatternsDemo.Run();
-BehavioralPatternsDemo.Run();
+//StructuralPatternsDemo.Run();
+//BehavioralPatternsDemo.Run();

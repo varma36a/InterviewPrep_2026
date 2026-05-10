@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Core Launch (DesignPatternsLearnign)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-design-patterns",
+      "program": "${workspaceFolder}/DesignPatternsLearnignFolder/bin/Debug/net8.0/DesignPatternsLearnign.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/DesignPatternsLearnignFolder",
+      "console": "integratedTerminal",
+      "stopAtEntry": false
+    }
+  ]
+}
