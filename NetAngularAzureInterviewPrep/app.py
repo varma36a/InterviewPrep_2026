@@ -24,6 +24,19 @@ LANG_MAP = {
 }
 
 
+def _set_search_query(term: str) -> None:
+    """Set search text before widgets bind — safe for on_click callbacks."""
+    st.session_state["search_query"] = term
+
+
+def _sidebar_search() -> None:
+    q = st.session_state.get("sidebar_search", "").strip()
+    if not q:
+        return
+    st.session_state["nav"] = "Search & Filter"
+    st.session_state["search_query"] = q
+
+
 def inject_css() -> None:
     st.markdown(
         """
@@ -603,9 +616,12 @@ def render_search() -> None:
     quick_terms = ["CAP theorem", "Sharding", "OAuth", "TCP vs UDP", "URL Shortener", "ACID", "Microservices", "JWT", "Binary Search", "Load Balancer"]
     for col, term in zip(quick, quick_terms):
         with col:
-            if st.button(term, key=f"q_{term}"):
-                st.session_state["search_query"] = term
-                st.rerun()
+            st.button(
+                term,
+                key=f"q_{term.replace(' ', '_')}",
+                on_click=_set_search_query,
+                args=(term,),
+            )
 
     results = search_items(query, section_ids, phase_ids)
     st.markdown(f"**{len(results)}** result(s)")
