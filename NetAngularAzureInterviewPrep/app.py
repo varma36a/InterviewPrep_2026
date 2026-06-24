@@ -44,18 +44,22 @@ def inject_css() -> None:
             font-weight: 600;
             margin-bottom: 0.5rem;
         }
-        .pill-foundation { background: #dcfce7; color: #166534; }
-        .pill-intermediate { background: #dbeafe; color: #1e40af; }
-        .pill-advanced { background: #fce7f3; color: #9d174d; }
+        .pill-foundation { background: #14532d; color: #bbf7d0; }
+        .pill-intermediate { background: #1e3a8a; color: #bfdbfe; }
+        .pill-advanced { background: #831843; color: #fbcfe8; }
         .stat-card {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
+            background: #1e293b;
+            border: 1px solid #334155;
             border-radius: 12px;
             padding: 1rem;
             text-align: center;
+            color: #f1f5f9;
+        }
+        .stat-card h2, .stat-card p {
+            color: #f1f5f9;
         }
         .result-meta {
-            color: #64748b;
+            color: #94a3b8;
             font-size: 0.85rem;
             margin-bottom: 0.5rem;
         }
@@ -64,6 +68,9 @@ def inject_css() -> None:
         }
         div[data-testid="stSidebar"] * {
             color: #e2e8f0 !important;
+        }
+        .stApp {
+            background-color: #0f172a;
         }
         </style>
         """,
