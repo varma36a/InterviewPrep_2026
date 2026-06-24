@@ -37,6 +37,43 @@ def _sidebar_search() -> None:
     st.session_state["search_query"] = q
 
 
+def _go_to_page(page_name: str) -> None:
+    st.session_state["nav"] = page_name
+
+
+def get_pages() -> list[str]:
+    pages = ["Home", "Search & Filter", "Roadmap", "Mock Interview"]
+    pages.extend(s.title for s in get_all_sections())
+    return pages
+
+
+def render_top_nav(pages: list[str]) -> str:
+    """Always-visible nav — primary on mobile, works on desktop too."""
+    current = st.session_state.get("nav", "Home")
+    if current not in pages:
+        current = "Home"
+        st.session_state["nav"] = current
+
+    st.markdown('<div class="top-nav-container">', unsafe_allow_html=True)
+    col_nav, col_meta = st.columns([4, 1])
+    with col_nav:
+        selected = st.selectbox(
+            "📚 Navigate to",
+            pages,
+            index=pages.index(current),
+            key="main_nav_select",
+        )
+    with col_meta:
+        st.markdown(
+            f'<p class="top-nav-meta">{count_items()}<br><span>topics</span></p>',
+            unsafe_allow_html=True,
+        )
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    st.session_state["nav"] = selected
+    return selected
+
+
 def inject_css() -> None:
     st.markdown(
         """
@@ -71,14 +108,68 @@ def inject_css() -> None:
             font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
         }
 
-        #MainMenu, footer, header[data-testid="stHeader"] {
+        #MainMenu, footer {
             visibility: hidden;
             height: 0;
         }
 
+        /* Keep header visible — required for mobile sidebar ☰ button */
+        header[data-testid="stHeader"] {
+            visibility: visible !important;
+            height: auto !important;
+            background: var(--blog-surface) !important;
+            border-bottom: 1px solid var(--blog-border);
+        }
+        header[data-testid="stHeader"] button {
+            color: var(--blog-accent) !important;
+        }
+        [data-testid="stSidebarCollapsedControl"],
+        [data-testid="stSidebarCollapseButton"],
+        button[kind="headerNoPadding"] {
+            visibility: visible !important;
+            min-width: 44px !important;
+            min-height: 44px !important;
+        }
+
+        /* Sticky top navigation (mobile-friendly) */
+        .top-nav-container {
+            position: sticky;
+            top: 3.25rem;
+            z-index: 998;
+            background: var(--blog-bg);
+            padding: 0.5rem 0 0.75rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid var(--blog-border);
+        }
+        .top-nav-meta {
+            text-align: right;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--blog-accent);
+            margin: 0.5rem 0 0;
+            line-height: 1.2;
+        }
+        .top-nav-meta span {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--blog-muted);
+        }
+        .mobile-nav-hint {
+            display: none;
+            font-size: 0.78rem;
+            color: var(--blog-muted);
+            margin: 0 0 1rem;
+            padding: 0.5rem 0.75rem;
+            background: var(--blog-surface);
+            border: 1px solid var(--blog-border);
+            border-radius: 8px;
+        }
+
         .block-container {
             max-width: 920px;
-            padding-top: 1.5rem;
+            padding-top: 0.75rem;
             padding-bottom: 4rem;
         }
 
@@ -448,6 +539,81 @@ def inject_css() -> None:
             font-size: 1rem;
             line-height: 1.6;
         }
+
+        /* ── Mobile responsive ── */
+        @media (max-width: 768px) {
+            .block-container {
+                max-width: 100%;
+                padding-left: 0.85rem !important;
+                padding-right: 0.85rem !important;
+            }
+            .blog-hero-title {
+                font-size: 1.65rem !important;
+            }
+            .blog-hero-lead {
+                font-size: 1rem;
+            }
+            .blog-topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.35rem;
+            }
+            .stat-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+            .stat-card h2 {
+                font-size: 1.35rem;
+            }
+            /* Stack Streamlit columns vertically */
+            [data-testid="column"] {
+                width: 100% !important;
+                flex: 1 1 100% !important;
+                min-width: 100% !important;
+            }
+            /* Touch-friendly buttons */
+            .stButton > button {
+                min-height: 44px !important;
+                padding: 0.5rem 0.75rem !important;
+            }
+            /* Quick search: 2 per row */
+            .quick-search-row [data-testid="column"] {
+                flex: 1 1 48% !important;
+                min-width: 48% !important;
+                width: 48% !important;
+            }
+            /* Horizontal scroll for section tabs */
+            div[data-testid="stTabs"] > div:first-child {
+                overflow-x: auto !important;
+                flex-wrap: nowrap !important;
+                -webkit-overflow-scrolling: touch;
+            }
+            div[data-testid="stTabs"] button {
+                white-space: nowrap !important;
+                font-size: 0.78rem !important;
+                padding: 0.5rem 0.65rem !important;
+            }
+            /* Code blocks scroll horizontally */
+            div[data-testid="stCodeBlock"] pre {
+                overflow-x: auto !important;
+                font-size: 0.78rem !important;
+            }
+            /* Wider sidebar when open on mobile */
+            section[data-testid="stSidebar"] {
+                min-width: min(85vw, 320px) !important;
+            }
+            .top-nav-container {
+                top: 3rem;
+            }
+            .mobile-nav-hint {
+                display: block !important;
+            }
+        }
+        @media (min-width: 769px) {
+            .mobile-nav-hint {
+                display: none !important;
+            }
+        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -539,9 +705,13 @@ def render_home() -> None:
         unsafe_allow_html=True,
     )
 
-    if st.button("🔍 Open Search & Filter", type="primary", use_container_width=True):
-        st.session_state["nav"] = "Search & Filter"
-        st.rerun()
+    st.button(
+        "🔍 Open Search & Filter",
+        type="primary",
+        use_container_width=True,
+        on_click=_go_to_page,
+        args=("Search & Filter",),
+    )
 
     st.markdown('<div class="blog-section-title">Skill areas</div>', unsafe_allow_html=True)
     cols = st.columns(2)
@@ -558,9 +728,13 @@ def render_home() -> None:
                 """,
                 unsafe_allow_html=True,
             )
-            if st.button(f"Explore {section.title}", key=f"go_{section.id}"):
-                st.session_state["nav"] = section.title
-                st.rerun()
+            st.button(
+                f"Explore {section.title}",
+                key=f"go_{section.id}",
+                on_click=_go_to_page,
+                args=(section.title,),
+                use_container_width=True,
+            )
 
     st.markdown('<hr class="blog-divider">', unsafe_allow_html=True)
     st.markdown('<div class="blog-section-title">Career level guide</div>', unsafe_allow_html=True)
@@ -585,11 +759,11 @@ def render_search() -> None:
         unsafe_allow_html=True,
     )
 
-    col1, col2, col3 = st.columns([2, 1, 1])
+    col1, col2, col3 = st.columns([1, 1, 1])
     with col1:
         query = st.text_input(
             "Search keywords",
-            placeholder="e.g. JWT, async, Docker, N+1, RxJS...",
+            placeholder="e.g. JWT, async, Docker...",
             key="search_query",
         )
     with col2:
@@ -612,16 +786,21 @@ def render_search() -> None:
     section_ids = [section_options[s] for s in selected_sections] or None
     phase_ids = [p.lower() for p in selected_phases] or None
 
-    quick = st.columns(10)
-    quick_terms = ["CAP theorem", "Sharding", "OAuth", "TCP vs UDP", "URL Shortener", "ACID", "Microservices", "JWT", "Binary Search", "Load Balancer"]
-    for col, term in zip(quick, quick_terms):
-        with col:
-            st.button(
-                term,
-                key=f"q_{term.replace(' ', '_')}",
-                on_click=_set_search_query,
-                args=(term,),
-            )
+    st.markdown('<div class="quick-search-row">', unsafe_allow_html=True)
+    quick_terms = ["CAP theorem", "Sharding", "OAuth", "TCP vs UDP", "URL Shortener",
+                   "ACID", "Microservices", "JWT", "Binary Search", "Load Balancer"]
+    for row_start in (0, 5):
+        cols = st.columns(5)
+        for col, term in zip(cols, quick_terms[row_start:row_start + 5]):
+            with col:
+                st.button(
+                    term,
+                    key=f"q_{term.replace(' ', '_')}",
+                    on_click=_set_search_query,
+                    args=(term,),
+                    use_container_width=True,
+                )
+    st.markdown("</div>", unsafe_allow_html=True)
 
     results = search_items(query, section_ids, phase_ids)
     st.markdown(f"**{len(results)}** result(s)")
@@ -725,32 +904,31 @@ Auth → Entra ID | Logs → App Insights"""),
         st.divider()
 
 
-def build_sidebar() -> str:
+def build_sidebar() -> None:
+    """Sidebar extras — main nav is in render_top_nav() for mobile access."""
     st.sidebar.markdown("### 📚 Navigation")
-    pages = ["Home", "Search & Filter", "Roadmap", "Mock Interview"]
-    for s in get_all_sections():
-        pages.append(s.title)
-
-    default = st.session_state.get("nav", "Home")
-    if default not in pages:
-        default = "Home"
-
-    page = st.sidebar.radio("Go to", pages, index=pages.index(default), label_visibility="collapsed")
-    st.session_state["nav"] = page
+    st.sidebar.caption("Use the **Navigate to** dropdown above, or browse below.")
 
     st.sidebar.divider()
     st.sidebar.markdown("**Quick search**")
-    sidebar_q = st.sidebar.text_input("Keyword", key="sidebar_search", placeholder="JWT, Docker...")
-    if sidebar_q and st.sidebar.button("Search"):
-        st.session_state["nav"] = "Search & Filter"
-        st.session_state["search_query"] = sidebar_q
-        st.rerun()
+    st.sidebar.text_input("Keyword", key="sidebar_search", placeholder="JWT, Docker...")
+    st.sidebar.button("Search", on_click=_sidebar_search, use_container_width=True)
+
+    st.sidebar.divider()
+    st.sidebar.markdown("**Jump to section**")
+    for s in get_all_sections():
+        total = sum(len(p.items) for p in s.phases)
+        st.sidebar.button(
+            f"{s.emoji} {s.title} ({total})",
+            key=f"sb_{s.id}",
+            use_container_width=True,
+            on_click=_go_to_page,
+            args=(s.title,),
+        )
 
     st.sidebar.divider()
     st.sidebar.metric("Topics", count_items())
     st.sidebar.metric("Sections", len(SECTIONS))
-
-    return page
 
 
 def main() -> None:
@@ -758,10 +936,18 @@ def main() -> None:
         page_title=".NET Angular Azure Interview Prep",
         page_icon="📚",
         layout="wide",
-        initial_sidebar_state="expanded",
+        initial_sidebar_state="auto",
     )
     inject_css()
-    page = build_sidebar()
+    pages = get_pages()
+    build_sidebar()
+    page = render_top_nav(pages)
+
+    st.markdown(
+        '<p class="mobile-nav-hint">☰ Tap the menu icon (top-left) for sidebar · '
+        'or use the <strong>Navigate to</strong> dropdown above.</p>',
+        unsafe_allow_html=True,
+    )
 
     if page == "Home":
         render_home()
