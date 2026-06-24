@@ -1,3 +1,11 @@
+import sys
+from pathlib import Path
+
+# Ensure imports work when Streamlit Cloud runs from repo root.
+_APP_ROOT = Path(__file__).resolve().parent
+if str(_APP_ROOT) not in sys.path:
+    sys.path.insert(0, str(_APP_ROOT))
+
 import streamlit as st
 
 from data.interview_content import (
@@ -710,6 +718,27 @@ def render_home() -> None:
         args=("Search & Filter",),
     )
 
+    st.markdown('<div class="blog-section-title">✨ New sections</div>', unsafe_allow_html=True)
+    new_cols = st.columns(2)
+    with new_cols[0]:
+        st.button(
+            "⚛️ React — 50 topics",
+            key="featured_react",
+            type="primary",
+            use_container_width=True,
+            on_click=_go_to_page,
+            args=("React",),
+        )
+    with new_cols[1]:
+        st.button(
+            "🟠 AWS — 50 topics",
+            key="featured_aws",
+            type="primary",
+            use_container_width=True,
+            on_click=_go_to_page,
+            args=("AWS",),
+        )
+
     st.markdown('<div class="blog-section-title">Skill areas</div>', unsafe_allow_html=True)
     cols = st.columns(2)
     for i, section in enumerate(get_all_sections()):
@@ -935,6 +964,7 @@ def build_sidebar() -> None:
     st.sidebar.divider()
     st.sidebar.metric("Topics", count_items())
     st.sidebar.metric("Sections", len(SECTIONS))
+    st.sidebar.caption(f"Catalog v{count_items()} · updated Jun 2026")
 
 
 def main() -> None:

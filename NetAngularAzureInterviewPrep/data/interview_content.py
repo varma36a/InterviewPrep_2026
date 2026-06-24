@@ -1007,7 +1007,12 @@ E2E / UI         ██            (10%) — minutes""",
 
 
 def get_all_sections() -> list[Section]:
-    return list(SECTIONS.values())
+    order = [
+        "dotnet", "aspnet", "frontend", "react", "database", "azure", "aws",
+        "practices", "optional", "htmlcss", "linq", "patterns", "dsa", "hld", "cs",
+    ]
+    rank = {sid: i for i, sid in enumerate(order)}
+    return sorted(SECTIONS.values(), key=lambda s: rank.get(s.id, 999))
 
 
 def get_section(section_id: str) -> Section | None:
