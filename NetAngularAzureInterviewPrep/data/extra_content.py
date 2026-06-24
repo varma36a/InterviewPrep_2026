@@ -857,6 +857,30 @@ app.MapGet("/api/orders/{id}", async (int id, AppDbContext db) =>
             ]),
         ],
     ),
+    "react": Section(
+        id="react",
+        title="React",
+        emoji="⚛️",
+        color="#61DAFB",
+        subtitle="Hooks, state management, performance, and modern React patterns",
+        phases=[
+            Phase("foundation", "Foundation", []),
+            Phase("intermediate", "Intermediate", []),
+            Phase("advanced", "Advanced", []),
+        ],
+    ),
+    "aws": Section(
+        id="aws",
+        title="AWS",
+        emoji="🟠",
+        color="#FF9900",
+        subtitle="EC2, S3, Lambda, IAM, and cloud architecture",
+        phases=[
+            Phase("foundation", "Foundation", []),
+            Phase("intermediate", "Intermediate", []),
+            Phase("advanced", "Advanced", []),
+        ],
+    ),
 }
 
 

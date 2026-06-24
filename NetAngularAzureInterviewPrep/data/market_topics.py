@@ -18,6 +18,8 @@ _MARKET_MODULES = [
     "data.market_devops_htmlcss",
     "data.market_devops_extra",
     "data.market_htmlcss_extra",
+    "data.market_react_extra",
+    "data.market_aws_extra",
 ]
 
 
