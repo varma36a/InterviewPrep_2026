@@ -38,6 +38,7 @@ def _sidebar_search() -> None:
 
 
 def _go_to_page(page_name: str) -> None:
+    """Update nav — must use same key as the top selectbox (key='nav')."""
     st.session_state["nav"] = page_name
 
 
@@ -49,10 +50,8 @@ def get_pages() -> list[str]:
 
 def render_top_nav(pages: list[str]) -> str:
     """Always-visible nav — primary on mobile, works on desktop too."""
-    current = st.session_state.get("nav", "Home")
-    if current not in pages:
-        current = "Home"
-        st.session_state["nav"] = current
+    if st.session_state.get("nav") not in pages:
+        st.session_state["nav"] = "Home"
 
     st.markdown('<div class="top-nav-container">', unsafe_allow_html=True)
     col_nav, col_meta = st.columns([4, 1])
@@ -60,8 +59,7 @@ def render_top_nav(pages: list[str]) -> str:
         selected = st.selectbox(
             "📚 Navigate to",
             pages,
-            index=pages.index(current),
-            key="main_nav_select",
+            key="nav",
         )
     with col_meta:
         st.markdown(
@@ -70,7 +68,6 @@ def render_top_nav(pages: list[str]) -> str:
         )
     st.markdown("</div>", unsafe_allow_html=True)
 
-    st.session_state["nav"] = selected
     return selected
 
 
@@ -565,8 +562,8 @@ def inject_css() -> None:
             .stat-card h2 {
                 font-size: 1.35rem;
             }
-            /* Stack Streamlit columns vertically */
-            [data-testid="column"] {
+            /* Stack main-content columns only — not sidebar */
+            section[data-testid="stMain"] [data-testid="column"] {
                 width: 100% !important;
                 flex: 1 1 100% !important;
                 min-width: 100% !important;
@@ -905,17 +902,26 @@ Auth → Entra ID | Logs → App Insights"""),
 
 
 def build_sidebar() -> None:
-    """Sidebar extras — main nav is in render_top_nav() for mobile access."""
-    st.sidebar.markdown("### 📚 Navigation")
-    st.sidebar.caption("Use the **Navigate to** dropdown above, or browse below.")
+    """Sidebar search + section navigation."""
+    st.sidebar.markdown("### 🔍 Search & Navigation")
 
-    st.sidebar.divider()
     st.sidebar.markdown("**Quick search**")
     st.sidebar.text_input("Keyword", key="sidebar_search", placeholder="JWT, Docker...")
-    st.sidebar.button("Search", on_click=_sidebar_search, use_container_width=True)
+    st.sidebar.button("Search topics", on_click=_sidebar_search, use_container_width=True)
 
     st.sidebar.divider()
-    st.sidebar.markdown("**Jump to section**")
+    st.sidebar.markdown("**Pages**")
+    for label in ("Home", "Search & Filter", "Roadmap", "Mock Interview"):
+        st.sidebar.button(
+            label,
+            key=f"sb_page_{label.replace(' ', '_')}",
+            use_container_width=True,
+            on_click=_go_to_page,
+            args=(label,),
+        )
+
+    st.sidebar.divider()
+    st.sidebar.markdown("**Sections**")
     for s in get_all_sections():
         total = sum(len(p.items) for p in s.phases)
         st.sidebar.button(
