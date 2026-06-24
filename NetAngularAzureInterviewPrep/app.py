@@ -28,24 +28,34 @@ def inject_css() -> None:
     st.markdown(
         """
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
         :root {
-            --blog-bg: #0a0b1e;
-            --blog-surface: #12131f;
-            --blog-surface-2: #181926;
-            --blog-border: #2a2b3d;
-            --blog-text: #f4f4f5;
+            /* 2026 trending zinc dark-first palette (Vercel / shadcn / Linear) */
+            --blog-bg: #09090b;
+            --blog-bg-glow: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(34,211,238,0.08), transparent);
+            --blog-surface: #18181b;
+            --blog-surface-2: #27272a;
+            --blog-elevated: #3f3f46;
+            --blog-border: rgba(255,255,255,0.08);
+            --blog-border-strong: #3f3f46;
+            --blog-text: #fafafa;
             --blog-muted: #a1a1aa;
-            --blog-purple: #a78bfa;
-            --blog-green: #4ade80;
-            --blog-blue: #60a5fa;
-            --blog-cta: #f5f0e8;
+            --blog-muted-2: #71717a;
+            /* Trending 2026 accents: cyan salience + violet secondary + emerald meta */
+            --blog-accent: #22d3ee;
+            --blog-accent-2: #8b5cf6;
+            --blog-green: #34d399;
+            --blog-amber: #fbbf24;
+            --blog-cta: #fafafa;
+            --blog-cta-text: #09090b;
         }
 
         html, body, .stApp {
             background-color: var(--blog-bg) !important;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+            background-image: var(--blog-bg-glow) !important;
+            background-attachment: fixed !important;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
         }
 
         #MainMenu, footer, header[data-testid="stHeader"] {
@@ -74,13 +84,17 @@ def inject_css() -> None:
             color: var(--blog-text);
             letter-spacing: -0.02em;
         }
-        .blog-logo span { color: var(--blog-purple); }
+        .blog-logo span {
+            background: linear-gradient(135deg, var(--blog-accent), var(--blog-accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
         .blog-topbar-tag {
             font-size: 0.72rem;
             font-weight: 600;
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            color: var(--blog-green);
+            color: var(--blog-accent);
         }
 
         .blog-back {
@@ -109,16 +123,19 @@ def inject_css() -> None:
             background: var(--blog-surface);
             color: var(--blog-muted);
         }
-        .blog-meta-pill.purple { color: var(--blog-purple); border-color: #3b3266; }
-        .blog-meta-pill.green  { color: var(--blog-green);  border-color: #14532d; }
-        .blog-meta-pill.blue   { color: var(--blog-blue);   border-color: #1e3a5f; }
+        .blog-meta-pill.purple { color: var(--blog-accent-2); border-color: rgba(139,92,246,0.35); background: rgba(139,92,246,0.08); }
+        .blog-meta-pill.green  { color: var(--blog-green);  border-color: rgba(52,211,153,0.35);  background: rgba(52,211,153,0.08); }
+        .blog-meta-pill.blue   { color: var(--blog-accent); border-color: rgba(34,211,238,0.35);  background: rgba(34,211,238,0.08); }
+        .blog-meta-pill.amber  { color: var(--blog-amber);  border-color: rgba(251,191,36,0.35);  background: rgba(251,191,36,0.08); }
 
         .blog-hero-title {
             font-size: clamp(1.85rem, 4vw, 2.65rem);
             font-weight: 800;
             line-height: 1.15;
             letter-spacing: -0.03em;
-            color: var(--blog-text);
+            background: linear-gradient(135deg, #fafafa 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin: 0 0 1rem 0;
         }
         .blog-hero-lead {
@@ -155,7 +172,7 @@ def inject_css() -> None:
             font-weight: 700;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            color: var(--blog-purple);
+            color: var(--blog-accent);
             margin-bottom: 0.5rem;
         }
         .blog-section-title {
@@ -187,11 +204,18 @@ def inject_css() -> None:
             border-radius: 14px;
             padding: 1.1rem 0.75rem;
             text-align: center;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .stat-card:hover {
+            border-color: rgba(34,211,238,0.25);
+            box-shadow: 0 0 24px rgba(34,211,238,0.06);
         }
         .stat-card h2 {
             font-size: 1.75rem;
             font-weight: 800;
-            color: var(--blog-text);
+            background: linear-gradient(135deg, var(--blog-accent), var(--blog-accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin: 0;
             letter-spacing: -0.03em;
         }
@@ -213,7 +237,10 @@ def inject_css() -> None:
             margin-bottom: 0.75rem;
             transition: border-color 0.2s;
         }
-        .skill-card:hover { border-color: #3b3266; }
+        .skill-card:hover {
+            border-color: rgba(34,211,238,0.3);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+        }
         .skill-card h3 {
             font-size: 1.05rem;
             font-weight: 700;
@@ -229,7 +256,7 @@ def inject_css() -> None:
         .skill-card .count {
             font-size: 0.8rem;
             font-weight: 600;
-            color: var(--blog-purple);
+            color: var(--blog-accent);
         }
 
         /* ── Phase pills ── */
@@ -242,10 +269,10 @@ def inject_css() -> None:
             margin-bottom: 0.5rem;
             border: 1px solid transparent;
         }
-        .pill-foundation   { background: #14532d33; color: #4ade80; border-color: #14532d; }
-        .pill-intermediate { background: #1e3a8a33; color: #60a5fa; border-color: #1e3a8a; }
-        .pill-advanced     { background: #83184333; color: #f472b6; border-color: #831843; }
-        .pill-default      { background: #3b326633; color: #a78bfa; border-color: #3b3266; }
+        .pill-foundation   { background: rgba(52,211,153,0.1);  color: #34d399; border-color: rgba(52,211,153,0.3); }
+        .pill-intermediate { background: rgba(34,211,238,0.1);  color: #22d3ee; border-color: rgba(34,211,238,0.3); }
+        .pill-advanced     { background: rgba(139,92,246,0.1);  color: #a78bfa; border-color: rgba(139,92,246,0.3); }
+        .pill-default      { background: rgba(251,191,36,0.1);  color: #fbbf24; border-color: rgba(251,191,36,0.3); }
 
         .result-meta {
             color: var(--blog-muted);
@@ -259,6 +286,9 @@ def inject_css() -> None:
             border-right: 1px solid var(--blog-border);
         }
         div[data-testid="stSidebar"] * { color: var(--blog-text) !important; }
+        div[data-testid="stSidebar"] [data-testid="stMetricValue"] {
+            color: var(--blog-accent) !important;
+        }
         div[data-testid="stSidebar"] .stRadio label {
             font-size: 0.875rem !important;
             padding: 0.35rem 0 !important;
@@ -278,7 +308,7 @@ def inject_css() -> None:
             padding: 0.85rem 1rem !important;
         }
         div[data-testid="stExpander"] summary:hover {
-            color: var(--blog-purple) !important;
+            color: var(--blog-accent) !important;
         }
         div[data-testid="stExpander"] .streamlit-expanderContent {
             border-top: 1px solid var(--blog-border) !important;
@@ -293,17 +323,23 @@ def inject_css() -> None:
             font-size: 0.85rem !important;
         }
         div[data-testid="stTabs"] button[aria-selected="true"] {
-            color: var(--blog-purple) !important;
-            border-bottom-color: var(--blog-purple) !important;
+            color: var(--blog-accent) !important;
+            border-bottom-color: var(--blog-accent) !important;
         }
 
         .stButton > button[kind="primary"] {
             background: var(--blog-cta) !important;
-            color: #0a0b1e !important;
+            color: var(--blog-cta-text) !important;
             border: none !important;
             border-radius: 999px !important;
             font-weight: 700 !important;
             padding: 0.55rem 1.4rem !important;
+            box-shadow: 0 0 20px rgba(250,250,250,0.08) !important;
+        }
+        .stButton > button[kind="primary"]:hover {
+            background: var(--blog-accent) !important;
+            color: var(--blog-cta-text) !important;
+            box-shadow: 0 0 24px rgba(34,211,238,0.25) !important;
         }
         .stButton > button[kind="secondary"],
         .stButton > button:not([kind="primary"]) {
@@ -337,13 +373,39 @@ def inject_css() -> None:
             border-radius: 10px !important;
         }
 
+        /* Inputs & selects */
+        div[data-testid="stTextInput"] input,
+        div[data-baseweb="select"] > div {
+            background: var(--blog-surface) !important;
+            border-color: var(--blog-border-strong) !important;
+            color: var(--blog-text) !important;
+            border-radius: 10px !important;
+        }
+        div[data-testid="stTextInput"] input:focus {
+            border-color: var(--blog-accent) !important;
+            box-shadow: 0 0 0 1px rgba(34,211,238,0.3) !important;
+        }
+
+        /* Markdown tables */
+        .stMarkdown table {
+            border-color: var(--blog-border-strong) !important;
+        }
+        .stMarkdown th {
+            background: var(--blog-surface-2) !important;
+            color: var(--blog-text) !important;
+        }
+        .stMarkdown td {
+            border-color: var(--blog-border) !important;
+            color: var(--blog-muted) !important;
+        }
+
         /* Article prose inside expanders */
         div[data-testid="stExpander"] h4 {
             font-size: 0.85rem !important;
             font-weight: 700 !important;
             text-transform: uppercase !important;
             letter-spacing: 0.07em !important;
-            color: var(--blog-purple) !important;
+            color: var(--blog-accent) !important;
             margin-top: 1.25rem !important;
         }
         div[data-testid="stExpander"] h4:first-of-type { margin-top: 0 !important; }
@@ -362,9 +424,11 @@ def inject_css() -> None:
         .blog-chapter-title {
             font-size: 1.85rem;
             font-weight: 800;
-            color: var(--blog-text);
             letter-spacing: -0.03em;
             margin: 0 0 0.4rem;
+            background: linear-gradient(135deg, #fafafa 0%, #d4d4d8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         .blog-chapter-sub {
             color: var(--blog-muted);
