@@ -18,7 +18,10 @@ from data.interview_content import (
     search_items,
 )
 from data.progress import (
+    create_tracker,
     export_payload,
+    get_active_tracker_id,
+    get_active_tracker_name,
     get_completed,
     import_payload,
     init_progress,
@@ -27,7 +30,10 @@ from data.progress import (
     progress_summary_by_section,
     reset_all,
     section_stats,
+    set_tracker_name,
+    switch_tracker,
     sync_topic,
+    tracker_bookmark_query,
     _checkbox_key,
 )
 
@@ -601,6 +607,21 @@ def inject_css() -> None:
             opacity: 0.85;
         }
 
+        .tracker-card {
+            background: var(--blog-surface);
+            border: 1px solid rgba(139,92,246,0.35);
+            border-radius: 14px;
+            padding: 1.1rem 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+        .tracker-id {
+            font-family: ui-monospace, monospace;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--blog-accent);
+            letter-spacing: 0.04em;
+        }
+
         /* ── Mobile responsive ── */
         @media (max-width: 768px) {
             .block-container {
@@ -997,8 +1018,108 @@ def _go_to_progress_section(section_title: str) -> None:
     st.session_state["progress_section_filter"] = section_title
 
 
-def render_progress() -> None:
+def _on_create_tracker() -> None:
+    name = st.session_state.get("new_tracker_name", "")
+    create_tracker(name)
+
+
+def _on_switch_tracker() -> None:
+    tid = st.session_state.get("switch_tracker_input", "")
+    err = switch_tracker(tid)
+    if err:
+        st.session_state["tracker_switch_error"] = err
+    else:
+        st.session_state.pop("tracker_switch_error", None)
+
+
+def render_tracker_panel() -> bool:
+    """Show tracker setup. Returns True when a tracker is active."""
     init_progress()
+    tracker_id = get_active_tracker_id()
+
+    st.markdown(
+        """
+        <div class="tracker-card">
+            <div class="blog-section-label">Personal progress tracker</div>
+            <p style="margin:0;color:var(--blog-muted);font-size:0.92rem;">
+                No login needed — each person uses their own <strong>Tracker ID</strong>.
+                Progress is kept separate per ID (family, friends, or multiple study plans).
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    if tracker_id:
+        name = get_active_tracker_name()
+        label = f" ({name})" if name else ""
+        st.markdown(
+            f'<p class="tracker-id">Active tracker: {tracker_id}{label}</p>',
+            unsafe_allow_html=True,
+        )
+        st.caption(
+            f"Bookmark this link on any device: add `{tracker_bookmark_query(tracker_id)}` to the app URL, "
+            "or export JSON below."
+        )
+        name_col, switch_col = st.columns([2, 1])
+        with name_col:
+            st.text_input(
+                "Your name (optional label)",
+                value=name,
+                key="tracker_display_name",
+                placeholder="e.g. Rohith",
+            )
+            if st.button("Save name", key="save_tracker_name"):
+                set_tracker_name(st.session_state.get("tracker_display_name", ""))
+                st.rerun()
+        with switch_col:
+            with st.expander("Switch tracker"):
+                st.text_input(
+                    "Enter Tracker ID",
+                    key="switch_tracker_input",
+                    placeholder="IP-XXXX-XXXX",
+                )
+                if st.session_state.get("tracker_switch_error"):
+                    st.error(st.session_state["tracker_switch_error"])
+                st.button("Switch", key="switch_tracker_btn", on_click=_on_switch_tracker)
+                st.text_input(
+                    "New tracker name (optional)",
+                    key="new_tracker_name",
+                    placeholder="New study plan",
+                )
+                st.button("Create new tracker", key="create_new_tracker", on_click=_on_create_tracker)
+        return True
+
+    st.warning("Create or enter a Tracker ID to start checking off topics.")
+    col_new, col_join = st.columns(2)
+    with col_new:
+        st.text_input("Your name (optional)", key="new_tracker_name", placeholder="e.g. Rohith")
+        st.button(
+            "✨ Create my tracker",
+            type="primary",
+            use_container_width=True,
+            on_click=_on_create_tracker,
+        )
+    with col_join:
+        st.text_input(
+            "Existing Tracker ID",
+            key="switch_tracker_input",
+            placeholder="IP-XXXX-XXXX",
+        )
+        if st.session_state.get("tracker_switch_error"):
+            st.error(st.session_state["tracker_switch_error"])
+        st.button(
+            "🔗 Use this tracker",
+            use_container_width=True,
+            on_click=_on_switch_tracker,
+        )
+    return False
+
+
+def render_progress() -> None:
+    if not render_tracker_panel():
+        return
+
     blog_topbar()
     done, total = overall_stats()
     pct = round((done / total) * 100) if total else 0
@@ -1014,7 +1135,8 @@ def render_progress() -> None:
     )
     st.markdown(
         '<p class="blog-hero-lead">Check off topics as you study. '
-        "Export your progress to keep it across sessions and devices.</p>",
+        "Your tracker ID keeps progress separate from other users. "
+        "Export JSON to move progress to another device.</p>",
         unsafe_allow_html=True,
     )
 
@@ -1033,7 +1155,7 @@ def render_progress() -> None:
         st.download_button(
             "⬇️ Export progress (JSON)",
             data=json.dumps(export_payload(), indent=2),
-            file_name="interview-prep-progress.json",
+            file_name=f"progress-{get_active_tracker_id() or 'tracker'}.json",
             mime="application/json",
             use_container_width=True,
         )
@@ -1187,7 +1309,10 @@ def build_sidebar() -> None:
     st.sidebar.divider()
     init_progress()
     done, total = overall_stats()
+    tracker_id = get_active_tracker_id()
     st.sidebar.markdown("**Your progress**")
+    if tracker_id:
+        st.sidebar.caption(f"Tracker: `{tracker_id}`")
     st.sidebar.progress(done / total if total else 0.0)
     st.sidebar.caption(f"{done}/{total} topics completed")
     st.sidebar.button(
