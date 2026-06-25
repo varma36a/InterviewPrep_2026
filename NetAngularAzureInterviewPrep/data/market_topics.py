@@ -7,6 +7,7 @@ from data.interview_content import InterviewItem, Section
 # (MARKET_ITEMS, MARKET_DETAILED) modules — order matters for readability only
 _MARKET_MODULES = [
     "data.market_angular_extra",
+    "data.market_angular_interview_extra",
     "data.market_dotnet_aspnet",
     "data.market_dotnet_extra",
     "data.market_aspnet_extra",
