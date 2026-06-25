@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 420" role="img" aria-label="Angular lifecycle phases diagram">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f97316"/>
+    </linearGradient>
+  </defs>
+  <rect width="920" height="420" rx="16" fill="#09090b" stroke="#3f3f46" stroke-width="2"/>
+  <text x="460" y="40" text-anchor="middle" fill="#fafafa" font-family="system-ui,sans-serif" font-size="20" font-weight="700">Three Lifecycle Phases</text>
+
+  <!-- Creation -->
+  <rect x="40" y="70" width="250" height="300" rx="14" fill="#18181b" stroke="url(#g1)" stroke-width="2"/>
+  <text x="165" y="105" text-anchor="middle" fill="#34d399" font-size="16" font-weight="700" font-family="system-ui,sans-serif">1 · CREATION</text>
+  <text x="165" y="130" text-anchor="middle" fill="#a1a1aa" font-size="12" font-family="system-ui,sans-serif">Component born</text>
+  <g font-family="system-ui,sans-serif" font-size="13" fill="#fafafa">
+    <text x="60" y="165">" constructor</text>
+    <text x="60" y="192">" ngOnChanges</text>
+    <text x="60" y="219">" ngOnInit</text>
+    <text x="60" y="246">" ngDoCheck</text>
+    <text x="60" y="273">" ngAfterContentInit</text>
+    <text x="60" y="300">" ngAfterViewInit</text>
+  </g>
+  <text x="165" y="345" text-anchor="middle" fill="#71717a" font-size="11" font-family="system-ui,sans-serif">Setup &amp; first render</text>
+
+  <!-- Update -->
+  <rect x="335" y="70" width="250" height="300" rx="14" fill="#18181b" stroke="url(#g2)" stroke-width="2"/>
+  <text x="460" y="105" text-anchor="middle" fill="#22d3ee" font-size="16" font-weight="700" font-family="system-ui,sans-serif">2 · UPDATE</text>
+  <text x="460" y="130" text-anchor="middle" fill="#a1a1aa" font-size="12" font-family="system-ui,sans-serif">Change detection cycles</text>
+  <g font-family="system-ui,sans-serif" font-size="13" fill="#fafafa">
+    <text x="355" y="165">" ngOnChanges</text>
+    <text x="355" y="192">" ngDoCheck</text>
+    <text x="355" y="219">" ngAfterContentChecked</text>
+    <text x="355" y="246">" ngAfterViewChecked</text>
+  </g>
+  <text x="460" y="290" text-anchor="middle" fill="#a1a1aa" font-size="12" font-family="system-ui,sans-serif">Triggered when:</text>
+  <text x="460" y="312" text-anchor="middle" fill="#71717a" font-size="11" font-family="system-ui,sans-serif">@Input changes · events</text>
+  <text x="460" y="330" text-anchor="middle" fill="#71717a" font-size="11" font-family="system-ui,sans-serif">async pipe · signals</text>
+
+  <!-- Destruction -->
+  <rect x="630" y="70" width="250" height="300" rx="14" fill="#18181b" stroke="url(#g3)" stroke-width="2"/>
+  <text x="755" y="105" text-anchor="middle" fill="#fbbf24" font-size="16" font-weight="700" font-family="system-ui,sans-serif">3 · DESTRUCTION</text>
+  <text x="755" y="130" text-anchor="middle" fill="#a1a1aa" font-size="12" font-family="system-ui,sans-serif">Component removed</text>
+  <g font-family="system-ui,sans-serif" font-size="13" fill="#fafafa">
+    <text x="650" y="180">" ngOnDestroy</text>
+  </g>
+  <text x="755" y="230" text-anchor="middle" fill="#a1a1aa" font-size="12" font-family="system-ui,sans-serif">Clean up:</text>
+  <text x="755" y="252" text-anchor="middle" fill="#71717a" font-size="11" font-family="system-ui,sans-serif">subscriptions</text>
+  <text x="755" y="270" text-anchor="middle" fill="#71717a" font-size="11" font-family="system-ui,sans-serif">intervals / timeouts</text>
+  <text x="755" y="288" text-anchor="middle" fill="#71717a" font-size="11" font-family="system-ui,sans-serif">WebSocket listeners</text>
+
+  <!-- Arrows -->
+  <path d="M 295 220 L 325 220" stroke="#52525b" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 590 220 L 620 220" stroke="#52525b" stroke-width="2"/>
+  <polygon points="325,220 315,215 315,225" fill="#52525b"/>
+  <polygon points="620,220 610,215 610,225" fill="#52525b"/>
+</svg>

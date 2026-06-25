@@ -735,6 +735,12 @@ def render_item(item, expanded: bool = False) -> None:
     with st.expander(f"❓ {item.question}", expanded=expanded):
         st.markdown("#### Detailed explanation")
         st.markdown(item.explanation)
+        if item.images:
+            st.markdown("#### Visual guide")
+            for img_path in item.images:
+                full_path = _APP_ROOT / img_path
+                if full_path.is_file():
+                    st.image(str(full_path), use_container_width=True)
         if item.key_points:
             st.markdown("#### Key points")
             for point in item.key_points:
@@ -757,7 +763,7 @@ def render_search_result(result: SearchResult, expanded: bool = False) -> None:
 def render_home() -> None:
     blog_topbar()
     blog_meta_pills(
-        ("739+ Topics", "purple"),
+        ("740+ Topics", "purple"),
         ("15 Sections", "blue"),
         ("Interview Prep", "green"),
         ("Updated 2026", "green"),
@@ -767,7 +773,7 @@ def render_home() -> None:
         unsafe_allow_html=True,
     )
     st.markdown(
-        '<p class="blog-hero-lead">Phase-wise interview Q&A with <strong>739+ topics</strong> '
+        '<p class="blog-hero-lead">Phase-wise interview Q&A with <strong>740+ topics</strong> '
         "(50 React, 50 AWS, 50 DSA, 40 HLD, 40 CS Fundamentals, Design Patterns), "
         "<strong>detailed explanations</strong>, and <strong>code examples</strong> "
         "— plus <strong>search</strong> across all topics.</p>",

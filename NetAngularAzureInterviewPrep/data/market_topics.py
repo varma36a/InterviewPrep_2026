@@ -8,6 +8,7 @@ from data.interview_content import InterviewItem, Section
 _MARKET_MODULES = [
     "data.market_angular_extra",
     "data.market_angular_interview_extra",
+    "data.market_angular_lifecycle_visual",
     "data.market_dotnet_aspnet",
     "data.market_dotnet_extra",
     "data.market_aspnet_extra",
@@ -69,4 +70,6 @@ def _apply_detail(item: InterviewItem, detailed: dict[str, dict]) -> InterviewIt
         updates["language"] = detail["language"]
     if detail.get("key_points"):
         updates["key_points"] = detail["key_points"]
+    if detail.get("images"):
+        updates["images"] = detail["images"]
     return replace(item, **updates) if updates else item

@@ -56,5 +56,7 @@ def _enhance_item(item: InterviewItem) -> InterviewItem:
         updates["language"] = detail["language"]
     if detail.get("key_points"):
         updates["key_points"] = detail["key_points"]
+    if detail.get("images"):
+        updates["images"] = detail["images"]
 
     return replace(item, **updates) if updates else item

@@ -11,6 +11,7 @@ class InterviewItem:
     code: str = ""
     language: str = "csharp"
     key_points: list[str] = field(default_factory=list)
+    images: list[str] = field(default_factory=list)
 
 
 @dataclass
