@@ -1,15 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" role="img" aria-label="When to use each Angular lifecycle hook">
   <rect width="920" height="480" rx="16" fill="#09090b" stroke="#3f3f46" stroke-width="2"/>
-  <text x="460" y="38" text-anchor="middle" fill="#fafafa" font-family="system-ui,sans-serif" font-size="20" font-weight="700">When To Use Each Hook (Interview Cheat Sheet)</text>
+  <text x="460" y="38" text-anchor="middle" fill="#fafafa" font-family="Arial,sans-serif" font-size="20" font-weight="700">When To Use Each Hook (Interview Cheat Sheet)</text>
 
-  <g font-family="system-ui,sans-serif">
-    <!-- Header row -->
+  <g font-family="Arial,sans-serif">
     <rect x="40" y="58" width="840" height="36" rx="8" fill="#27272a"/>
     <text x="60" y="81" fill="#22d3ee" font-size="13" font-weight="700">Hook</text>
     <text x="240" y="81" fill="#22d3ee" font-size="13" font-weight="700">Use when</text>
     <text x="620" y="81" fill="#22d3ee" font-size="13" font-weight="700">Example</text>
 
-    <!-- Rows -->
     <rect x="40" y="104" width="840" height="52" rx="8" fill="#18181b" stroke="#3f3f46"/>
     <text x="60" y="135" fill="#34d399" font-size="14" font-weight="600">ngOnInit</text>
     <text x="240" y="128" fill="#fafafa" font-size="13">One-time setup after inputs bound</text>
@@ -24,7 +22,7 @@
 
     <rect x="40" y="224" width="840" height="52" rx="8" fill="#18181b" stroke="#22d3ee" stroke-width="2"/>
     <text x="60" y="255" fill="#22d3ee" font-size="14" font-weight="700">ngAfterViewInit</text>
-    <text x="240" y="248" fill="#fafafa" font-size="13">ViewChild &amp; DOM are ready</text>
+    <text x="240" y="248" fill="#fafafa" font-size="13">ViewChild and DOM are ready</text>
     <text x="240" y="266" fill="#71717a" font-size="11">Third-party libs need DOM element</text>
     <text x="620" y="255" fill="#a1a1aa" font-size="12">chart.init(), input.focus()</text>
 
@@ -42,7 +40,7 @@
 
     <rect x="40" y="404" width="840" height="52" rx="8" fill="#18181b" stroke="#3f3f46"/>
     <text x="60" y="435" fill="#71717a" font-size="14" font-weight="600">ngDoCheck / *Checked</text>
-    <text x="240" y="428" fill="#fafafa" font-size="13">Advanced / rare  custom CD</text>
+    <text x="240" y="428" fill="#fafafa" font-size="13">Advanced / rare - custom CD</text>
     <text x="240" y="446" fill="#71717a" font-size="11">Avoid heavy logic here</text>
     <text x="620" y="435" fill="#a1a1aa" font-size="12">mention only if asked</text>
   </g>

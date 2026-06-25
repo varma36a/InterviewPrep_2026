@@ -1,3 +1,4 @@
+import base64
 import json
 import sys
 from pathlib import Path
@@ -8,6 +9,7 @@ if str(_APP_ROOT) not in sys.path:
     sys.path.insert(0, str(_APP_ROOT))
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 from data.interview_content import (
     SECTIONS,
@@ -746,17 +748,41 @@ def phase_pill(phase_id: str) -> str:
     return f'<span class="phase-pill {css}">{phase_id.capitalize()}</span>'
 
 
+# Default iframe heights for known SVG diagrams (from viewBox)
+_SVG_HEIGHTS: dict[str, int] = {
+    "assets/angular/lifecycle-timeline.svg": 740,
+    "assets/angular/lifecycle-phases.svg": 440,
+    "assets/angular/lifecycle-hooks-usage.svg": 500,
+}
+
+
+def _svg_iframe_height(img_path: str, svg: str) -> int:
+    if img_path in _SVG_HEIGHTS:
+        return _SVG_HEIGHTS[img_path]
+    import re
+    match = re.search(r'viewBox="[^"]+\s+([\d.]+)"', svg)
+    if match:
+        return int(float(match.group(1))) + 20
+    return 480
+
+
 def render_topic_image(img_path: str) -> None:
-    """Render topic images — SVG inline (Cloud-safe), raster via st.image."""
+    """Render topic images — SVG via iframe (Cloud-safe), raster via st.image."""
     full_path = _APP_ROOT / img_path
     if not full_path.is_file():
         return
     suffix = full_path.suffix.lower()
     if suffix == ".svg":
         svg = full_path.read_text(encoding="utf-8")
-        st.markdown(
-            f'<div class="topic-visual">{svg}</div>',
-            unsafe_allow_html=True,
+        height = _svg_iframe_height(img_path, svg)
+        components.html(
+            f"""<!DOCTYPE html>
+<html><head><meta charset="utf-8"/>
+<style>body{{margin:0;padding:0;background:#09090b;overflow:hidden;}}
+svg{{display:block;width:100%;height:auto;}}</style></head>
+<body>{svg}</body></html>""",
+            height=height,
+            scrolling=False,
         )
     else:
         st.image(str(full_path), use_container_width=True)
