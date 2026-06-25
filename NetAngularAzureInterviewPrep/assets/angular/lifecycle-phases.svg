@@ -18,7 +18,7 @@
 
   <!-- Creation -->
   <rect x="40" y="70" width="250" height="300" rx="14" fill="#18181b" stroke="url(#g1)" stroke-width="2"/>
-  <text x="165" y="105" text-anchor="middle" fill="#34d399" font-size="16" font-weight="700" font-family="system-ui,sans-serif">1 · CREATION</text>
+  <text x="165" y="105" text-anchor="middle" fill="#34d399" font-size="16" font-weight="700" font-family="system-ui,sans-serif">1 - CREATION</text>
   <text x="165" y="130" text-anchor="middle" fill="#a1a1aa" font-size="12" font-family="system-ui,sans-serif">Component born</text>
   <g font-family="system-ui,sans-serif" font-size="13" fill="#fafafa">
     <text x="60" y="165">" constructor</text>
@@ -32,7 +32,7 @@
 
   <!-- Update -->
   <rect x="335" y="70" width="250" height="300" rx="14" fill="#18181b" stroke="url(#g2)" stroke-width="2"/>
-  <text x="460" y="105" text-anchor="middle" fill="#22d3ee" font-size="16" font-weight="700" font-family="system-ui,sans-serif">2 · UPDATE</text>
+  <text x="460" y="105" text-anchor="middle" fill="#22d3ee" font-size="16" font-weight="700" font-family="system-ui,sans-serif">2 - UPDATE</text>
   <text x="460" y="130" text-anchor="middle" fill="#a1a1aa" font-size="12" font-family="system-ui,sans-serif">Change detection cycles</text>
   <g font-family="system-ui,sans-serif" font-size="13" fill="#fafafa">
     <text x="355" y="165">" ngOnChanges</text>
@@ -41,12 +41,12 @@
     <text x="355" y="246">" ngAfterViewChecked</text>
   </g>
   <text x="460" y="290" text-anchor="middle" fill="#a1a1aa" font-size="12" font-family="system-ui,sans-serif">Triggered when:</text>
-  <text x="460" y="312" text-anchor="middle" fill="#71717a" font-size="11" font-family="system-ui,sans-serif">@Input changes · events</text>
-  <text x="460" y="330" text-anchor="middle" fill="#71717a" font-size="11" font-family="system-ui,sans-serif">async pipe · signals</text>
+  <text x="460" y="312" text-anchor="middle" fill="#71717a" font-size="11" font-family="system-ui,sans-serif">@Input changes - events</text>
+  <text x="460" y="330" text-anchor="middle" fill="#71717a" font-size="11" font-family="system-ui,sans-serif">async pipe - signals</text>
 
   <!-- Destruction -->
   <rect x="630" y="70" width="250" height="300" rx="14" fill="#18181b" stroke="url(#g3)" stroke-width="2"/>
-  <text x="755" y="105" text-anchor="middle" fill="#fbbf24" font-size="16" font-weight="700" font-family="system-ui,sans-serif">3 · DESTRUCTION</text>
+  <text x="755" y="105" text-anchor="middle" fill="#fbbf24" font-size="16" font-weight="700" font-family="system-ui,sans-serif">3 - DESTRUCTION</text>
   <text x="755" y="130" text-anchor="middle" fill="#a1a1aa" font-size="12" font-family="system-ui,sans-serif">Component removed</text>
   <g font-family="system-ui,sans-serif" font-size="13" fill="#fafafa">
     <text x="650" y="180">" ngOnDestroy</text>

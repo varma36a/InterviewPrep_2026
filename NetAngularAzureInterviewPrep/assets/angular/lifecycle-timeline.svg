@@ -82,5 +82,5 @@
     <text x="340" y="595" fill="#a1a1aa" font-size="13">Unsubscribe, clear timers, release resources</text>
   </g>
 
-  <text x="460" y="698" text-anchor="middle" fill="#71717a" font-family="system-ui,sans-serif" font-size="12">Interview focus: ngOnInit · ngOnChanges · ngAfterViewInit · ngOnDestroy</text>
+  <text x="460" y="698" text-anchor="middle" fill="#71717a" font-family="system-ui,sans-serif" font-size="12">Interview focus: ngOnInit - ngOnChanges - ngAfterViewInit - ngOnDestroy</text>
 </svg>
