@@ -622,6 +622,21 @@ def inject_css() -> None:
             letter-spacing: 0.04em;
         }
 
+        .topic-visual {
+            margin: 1rem 0 1.25rem;
+            padding: 0.75rem;
+            background: var(--blog-surface);
+            border: 1px solid var(--blog-border);
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+        .topic-visual svg {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+        }
+
         /* ── Mobile responsive ── */
         @media (max-width: 768px) {
             .block-container {
@@ -731,6 +746,22 @@ def phase_pill(phase_id: str) -> str:
     return f'<span class="phase-pill {css}">{phase_id.capitalize()}</span>'
 
 
+def render_topic_image(img_path: str) -> None:
+    """Render topic images — SVG inline (Cloud-safe), raster via st.image."""
+    full_path = _APP_ROOT / img_path
+    if not full_path.is_file():
+        return
+    suffix = full_path.suffix.lower()
+    if suffix == ".svg":
+        svg = full_path.read_text(encoding="utf-8")
+        st.markdown(
+            f'<div class="topic-visual">{svg}</div>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.image(str(full_path), use_container_width=True)
+
+
 def render_item(item, expanded: bool = False) -> None:
     with st.expander(f"❓ {item.question}", expanded=expanded):
         st.markdown("#### Detailed explanation")
@@ -738,9 +769,7 @@ def render_item(item, expanded: bool = False) -> None:
         if item.images:
             st.markdown("#### Visual guide")
             for img_path in item.images:
-                full_path = _APP_ROOT / img_path
-                if full_path.is_file():
-                    st.image(str(full_path), use_container_width=True)
+                render_topic_image(img_path)
         if item.key_points:
             st.markdown("#### Key points")
             for point in item.key_points:
