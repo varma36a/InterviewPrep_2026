@@ -1,3 +1,4 @@
+import json
 import sys
 from pathlib import Path
 
@@ -15,6 +16,19 @@ from data.interview_content import (
     get_all_sections,
     get_section,
     search_items,
+)
+from data.progress import (
+    export_payload,
+    get_completed,
+    import_payload,
+    init_progress,
+    mark_section,
+    overall_stats,
+    progress_summary_by_section,
+    reset_all,
+    section_stats,
+    sync_topic,
+    _checkbox_key,
 )
 
 LANG_MAP = {
@@ -51,7 +65,7 @@ def _go_to_page(page_name: str) -> None:
 
 
 def get_pages() -> list[str]:
-    pages = ["Home", "Search & Filter", "Roadmap", "Mock Interview"]
+    pages = ["Home", "Search & Filter", "My Progress", "Roadmap", "Mock Interview"]
     pages.extend(s.title for s in get_all_sections())
     return pages
 
@@ -545,6 +559,48 @@ def inject_css() -> None:
             line-height: 1.6;
         }
 
+        .progress-card {
+            background: var(--blog-surface);
+            border: 1px solid var(--blog-border);
+            border-radius: 14px;
+            padding: 1rem 1.15rem;
+            margin-bottom: 0.65rem;
+        }
+        .progress-card h4 {
+            margin: 0 0 0.35rem !important;
+            font-size: 0.95rem !important;
+            color: var(--blog-text) !important;
+        }
+        .progress-card .pct {
+            font-size: 0.82rem;
+            color: var(--blog-accent);
+            font-weight: 700;
+        }
+        .progress-overall {
+            background: linear-gradient(135deg, rgba(34,211,238,0.08), rgba(139,92,246,0.08));
+            border: 1px solid rgba(34,211,238,0.2);
+            border-radius: 16px;
+            padding: 1.25rem 1.35rem;
+            margin-bottom: 1.5rem;
+        }
+        .progress-overall h3 {
+            margin: 0 0 0.75rem !important;
+            font-size: 1.35rem !important;
+        }
+        .checklist-item label {
+            font-size: 0.88rem !important;
+            line-height: 1.45 !important;
+        }
+        div[data-testid="stCheckbox"] label p {
+            color: var(--blog-muted) !important;
+        }
+        div[data-testid="stCheckbox"] label[data-checked="true"] p,
+        div[data-testid="stCheckbox"]:has(input:checked) label p {
+            color: var(--blog-green) !important;
+            text-decoration: line-through;
+            opacity: 0.85;
+        }
+
         /* ── Mobile responsive ── */
         @media (max-width: 768px) {
             .block-container {
@@ -716,6 +772,12 @@ def render_home() -> None:
         use_container_width=True,
         on_click=_go_to_page,
         args=("Search & Filter",),
+    )
+    st.button(
+        "✅ Track my progress",
+        use_container_width=True,
+        on_click=_go_to_page,
+        args=("My Progress",),
     )
 
     st.markdown('<div class="blog-section-title">✨ New sections</div>', unsafe_allow_html=True)
@@ -930,6 +992,167 @@ Auth → Entra ID | Logs → App Insights"""),
         st.divider()
 
 
+def _go_to_progress_section(section_title: str) -> None:
+    st.session_state["nav"] = "My Progress"
+    st.session_state["progress_section_filter"] = section_title
+
+
+def render_progress() -> None:
+    init_progress()
+    blog_topbar()
+    done, total = overall_stats()
+    pct = round((done / total) * 100) if total else 0
+
+    blog_meta_pills(
+        ("Progress Tracker", "purple"),
+        (f"{done}/{total} done", "green"),
+        (f"{pct}% complete", "blue"),
+    )
+    st.markdown(
+        '<h1 class="blog-hero-title">✅ My Progress</h1>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        '<p class="blog-hero-lead">Check off topics as you study. '
+        "Export your progress to keep it across sessions and devices.</p>",
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        f"""
+        <div class="progress-overall">
+            <h3>Overall — {done} of {total} topics completed</h3>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.progress(done / total if total else 0.0)
+
+    col_export, col_import, col_reset = st.columns(3)
+    with col_export:
+        st.download_button(
+            "⬇️ Export progress (JSON)",
+            data=json.dumps(export_payload(), indent=2),
+            file_name="interview-prep-progress.json",
+            mime="application/json",
+            use_container_width=True,
+        )
+    with col_import:
+        uploaded = st.file_uploader(
+            "Import progress JSON",
+            type=["json"],
+            key="progress_import_file",
+        )
+        if uploaded is not None and st.button("Apply import", key="apply_progress_import"):
+            count, err = import_payload(uploaded.getvalue().decode("utf-8"))
+            if err:
+                st.error(err)
+            else:
+                st.success(f"Loaded {count} completed topics.")
+                st.rerun()
+    with col_reset:
+        if st.button("🗑️ Reset all progress", use_container_width=True):
+            reset_all()
+            st.rerun()
+
+    st.markdown('<div class="blog-section-title">Progress by section</div>', unsafe_allow_html=True)
+
+    section_titles = [s.title for s in get_all_sections()]
+    filter_options = ["All sections"] + section_titles
+    if "progress_section_filter" not in st.session_state:
+        st.session_state["progress_section_filter"] = filter_options[0]
+
+    selected_filter = st.selectbox(
+        "Section checklist",
+        filter_options,
+        key="progress_section_filter",
+    )
+
+    summary_rows = progress_summary_by_section()
+    for i in range(0, len(summary_rows), 3):
+        batch = summary_rows[i : i + 3]
+        summary_cols = st.columns(len(batch))
+        for col, (sid, emoji, title, sec_done, sec_total) in zip(summary_cols, batch):
+            with col:
+                sec_pct = round((sec_done / sec_total) * 100) if sec_total else 0
+                st.markdown(
+                    f"""
+                    <div class="progress-card">
+                        <h4>{emoji} {title}</h4>
+                        <div class="pct">{sec_done}/{sec_total} · {sec_pct}%</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+                st.progress(sec_done / sec_total if sec_total else 0.0)
+                st.button(
+                    "Open checklist",
+                    key=f"open_prog_{sid}",
+                    use_container_width=True,
+                    on_click=_go_to_progress_section,
+                    args=(title,),
+                )
+
+    st.divider()
+    st.markdown('<div class="blog-section-title">Topic checklist</div>', unsafe_allow_html=True)
+
+    if selected_filter == "All sections":
+        st.info("Select a **section** above (or click **Open checklist** on a card) to review and check off topics.")
+        return
+
+    sections_to_show = [s for s in get_all_sections() if s.title == selected_filter]
+    if not sections_to_show:
+        st.warning("Section not found.")
+        return
+
+    completed = get_completed()
+    for section in sections_to_show:
+        sec_done, sec_total = section_stats(section.id)
+        st.markdown(f"### {section.emoji} {section.title} ({sec_done}/{sec_total})")
+
+        act_col1, act_col2 = st.columns(2)
+        with act_col1:
+            if st.button(
+                f"Mark all complete — {section.title}",
+                key=f"mark_all_{section.id}",
+                use_container_width=True,
+            ):
+                mark_section(section.id, True)
+                st.rerun()
+        with act_col2:
+            if st.button(
+                f"Clear section — {section.title}",
+                key=f"clear_all_{section.id}",
+                use_container_width=True,
+            ):
+                mark_section(section.id, False)
+                st.rerun()
+
+        for phase in section.phases:
+            phase_done = sum(1 for item in phase.items if item.id in completed)
+            with st.expander(
+                f"{phase.label} ({phase_done}/{len(phase.items)})",
+                expanded=True,
+            ):
+                st.markdown(
+                    f'<div class="checklist-item">',
+                    unsafe_allow_html=True,
+                )
+                for item in phase.items:
+                    cb_key = _checkbox_key(item.id)
+                    if cb_key not in st.session_state:
+                        st.session_state[cb_key] = item.id in completed
+                    st.checkbox(
+                        item.question,
+                        key=cb_key,
+                        on_change=sync_topic,
+                        args=(item.id,),
+                    )
+                st.markdown("</div>", unsafe_allow_html=True)
+
+        st.divider()
+
+
 def build_sidebar() -> None:
     """Sidebar search + section navigation."""
     st.sidebar.markdown("### 🔍 Search & Navigation")
@@ -940,10 +1163,10 @@ def build_sidebar() -> None:
 
     st.sidebar.divider()
     st.sidebar.markdown("**Pages**")
-    for label in ("Home", "Search & Filter", "Roadmap", "Mock Interview"):
+    for label in ("Home", "Search & Filter", "My Progress", "Roadmap", "Mock Interview"):
         st.sidebar.button(
             label,
-            key=f"sb_page_{label.replace(' ', '_')}",
+            key=f"sb_page_{label.replace(' ', '_').replace('&', 'and')}",
             use_container_width=True,
             on_click=_go_to_page,
             args=(label,),
@@ -962,6 +1185,19 @@ def build_sidebar() -> None:
         )
 
     st.sidebar.divider()
+    init_progress()
+    done, total = overall_stats()
+    st.sidebar.markdown("**Your progress**")
+    st.sidebar.progress(done / total if total else 0.0)
+    st.sidebar.caption(f"{done}/{total} topics completed")
+    st.sidebar.button(
+        "✅ Open My Progress",
+        use_container_width=True,
+        on_click=_go_to_page,
+        args=("My Progress",),
+    )
+
+    st.sidebar.divider()
     st.sidebar.metric("Topics", count_items())
     st.sidebar.metric("Sections", len(SECTIONS))
     st.sidebar.caption(f"Catalog v{count_items()} · updated Jun 2026")
@@ -975,6 +1211,7 @@ def main() -> None:
         initial_sidebar_state="auto",
     )
     inject_css()
+    init_progress()
     pages = get_pages()
     build_sidebar()
     page = render_top_nav(pages)
@@ -989,6 +1226,8 @@ def main() -> None:
         render_home()
     elif page == "Search & Filter":
         render_search()
+    elif page == "My Progress":
+        render_progress()
     elif page == "Roadmap":
         render_roadmap()
     elif page == "Mock Interview":
