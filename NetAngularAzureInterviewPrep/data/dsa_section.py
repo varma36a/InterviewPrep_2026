@@ -24,7 +24,7 @@ DSA_SECTION = Section(
     title="DSA Coding",
     emoji="🧮",
     color="#059669",
-    subtitle="Top 50 data structures & algorithms — topic-wise with C# solutions",
+    subtitle="Top 50 DSA problems — topic-wise with C# solutions and detailed time/space complexity",
     phases=[
         Phase("arrays", "Arrays, Hashing & Strings", [
             _q("dsa-two-sum", "Two Sum — find two indices that add to target",
@@ -199,8 +199,34 @@ DSA_SECTION = Section(
 
 
 def apply_dsa_section(sections: dict, detailed: dict) -> None:
-    """Register DSA section and merge detailed solutions."""
+    """Register DSA section, topic complexity guides, and merge detailed solutions."""
+    from dataclasses import replace
+
+    from data.dsa_complexity import TOPIC_GUIDES, apply_dsa_complexity
     from data.dsa_detailed import DSA_DETAILED
 
-    sections["dsa"] = DSA_SECTION
     detailed.update(DSA_DETAILED)
+    apply_dsa_complexity(detailed)
+
+    phases_with_guides: list[Phase] = []
+    for phase in DSA_SECTION.phases:
+        guide = TOPIC_GUIDES.get(phase.id)
+        items = list(phase.items)
+        if guide:
+            guide_id = f"dsa-guide-{phase.id}"
+            detailed[guide_id] = {
+                "explanation": guide["explanation"],
+                "key_points": guide["key_points"],
+            }
+            guide_item = InterviewItem(
+                id=guide_id,
+                question=f"📊 {guide['title']} — Time & Space Complexity Guide",
+                explanation=guide["explanation"],
+                code="",
+                language="text",
+                key_points=guide["key_points"],
+            )
+            items = [guide_item, *items]
+        phases_with_guides.append(Phase(phase.id, phase.label, items))
+
+    sections["dsa"] = replace(DSA_SECTION, phases=phases_with_guides)
