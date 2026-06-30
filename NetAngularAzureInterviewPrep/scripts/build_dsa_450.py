@@ -28,6 +28,7 @@ from data.dsa_450_infer import (
     slugify,
     topic_to_phase,
 )
+from data.dsa_450_code import generate_csharp
 
 XLSX = ROOT / "data" / "ScalerRevision.xlsx"
 OUT_CATALOG = ROOT / "data" / "dsa_450_catalog.py"
@@ -119,14 +120,19 @@ def generate() -> tuple[int, int]:
             meta = infer_complexity(row["problem"], row["topic"])
             explanation = build_explanation(row["problem"], meta)
             kps = key_points_from_meta(meta)
-            detailed_entries[pid] = {"explanation": explanation, "key_points": kps}
-            stub = f"// {row['problem'][:80]}"
+            code = generate_csharp(row["problem"], row["topic"], meta)
+            detailed_entries[pid] = {
+                "explanation": explanation,
+                "key_points": kps,
+                "code": code,
+                "language": "csharp",
+            }
             phase_lines.append(
                 f'            InterviewItem(\n'
                 f'                {py_str(pid)},\n'
                 f'                {py_str(row["problem"])},\n'
                 f'                "See detailed explanation.",\n'
-                f'                {py_str(stub)},\n'
+                f'                {py_str("// C# solution below")},\n'
                 f'                "csharp",\n'
                 f'                key_points={kps!r},\n'
                 f'            ),'
@@ -167,6 +173,9 @@ def generate() -> tuple[int, int]:
         detailed_lines.append(f"    {py_str(pid)}: {{")
         detailed_lines.append(f"        'explanation': {py_str(entry['explanation'])},")
         detailed_lines.append(f"        'key_points': {entry['key_points']!r},")
+        if entry.get("code"):
+            detailed_lines.append(f"        'code': {py_str(entry['code'])},")
+            detailed_lines.append(f"        'language': 'csharp',")
         detailed_lines.append("    },")
     detailed_lines.append("}")
     detailed_src = (
