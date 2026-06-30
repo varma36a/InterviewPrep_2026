@@ -817,7 +817,7 @@ def render_search_result(result: SearchResult, expanded: bool = False) -> None:
 def render_home() -> None:
     blog_topbar()
     blog_meta_pills(
-        ("749+ Topics", "purple"),
+        ("1150+ Topics", "purple"),
         ("15 Sections", "blue"),
         ("Interview Prep", "green"),
         ("Updated 2026", "green"),
@@ -827,8 +827,8 @@ def render_home() -> None:
         unsafe_allow_html=True,
     )
     st.markdown(
-        '<p class="blog-hero-lead">Phase-wise interview Q&A with <strong>749+ topics</strong> '
-        "(59 DSA with complexity guides, 50 React, 50 AWS, 40 HLD, 40 CS Fundamentals), "
+        '<p class="blog-hero-lead">Phase-wise interview Q&A with <strong>1150+ topics</strong> '
+        "(448 Love Babbar DSA with TC/SC, 50 React, 50 AWS, 40 HLD, 40 CS Fundamentals), "
         "<strong>detailed explanations</strong>, and <strong>code examples</strong> "
         "— plus <strong>search</strong> across all topics.</p>",
         unsafe_allow_html=True,
