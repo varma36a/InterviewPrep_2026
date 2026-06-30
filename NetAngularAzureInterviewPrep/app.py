@@ -1,5 +1,6 @@
 import json
 import sys
+import unicodedata
 from pathlib import Path
 
 # Ensure imports work when Streamlit Cloud runs from repo root.
@@ -747,6 +748,23 @@ def phase_pill(phase_id: str) -> str:
     return f'<span class="phase-pill {css}">{phase_id.capitalize()}</span>'
 
 
+def safe_display_text(text: str) -> str:
+    """ASCII-safe text for Streamlit expander labels (protobuf on Cloud)."""
+    if not text:
+        return ""
+    text = unicodedata.normalize("NFKC", text)
+    text = (
+        text.replace("\u2014", "-")
+        .replace("\u2013", "-")
+        .replace("\u2018", "'")
+        .replace("\u2019", "'")
+        .replace("\u201c", '"')
+        .replace("\u201d", '"')
+        .replace("\u00a0", " ")
+    )
+    return text.encode("ascii", "ignore").decode("ascii").strip()
+
+
 # Default iframe heights for known SVG diagrams (from viewBox)
 _SVG_HEIGHTS: dict[str, int] = {
     "assets/angular/lifecycle-timeline.svg": 740,
@@ -788,7 +806,8 @@ svg{{display:block;width:100%;height:auto;}}</style></head>
 
 
 def render_item(item, expanded: bool = False) -> None:
-    with st.expander(f"❓ {item.question}", expanded=expanded):
+    label = safe_display_text(item.question) or "Topic"
+    with st.expander(f"Q: {label}", expanded=expanded):
         st.markdown("#### Detailed explanation")
         st.markdown(item.explanation)
         if item.images:

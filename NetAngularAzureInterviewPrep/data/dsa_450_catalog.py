@@ -14,7 +14,7 @@ DSA_450_SECTION = Section(
         Phase("array", "Array", [
     InterviewItem(
         "dsa-guide-array",
-        "\ud83d\udcca Array \u2014 Time & Space Complexity Guide",
+        "[Guide] Array - Time & Space Complexity",
         "Array problems dominate interviews. **Random access is O(1)** but insert/delete in middle is **O(n)**. Most optimal solutions use **hash maps** (O(n) time, O(n) space), **two pointers** (O(n), O(1)), or **prefix sums** for range queries.\n\n**Key patterns:** complement lookup, frequency counting, Kadane for subarrays, Dutch flag for 3-way partition, and sort-then-scan when order unlocks greedy or two-pointer moves.",
         "",
         "text",
@@ -216,7 +216,7 @@ DSA_450_SECTION = Section(
         "dsa-450-array-025-given-an-array-of-size-n-and-a-numbe",
         "Given an array of size n and a number k, fin all elements that appear more than \" n/k \" times.",
         "See detailed explanation.",
-        "// Given an array of size n and a number k, fin all elements that appear more than ",
+        "// Given an array of size n and a number k, fin all elements that appear more than",
         "csharp",
         key_points=['Pattern: Array scan / hash / two pointers', 'Time: O(n²) worst (O(n) best)', 'Space: O(1) auxiliary'],
     ),
@@ -312,7 +312,7 @@ DSA_450_SECTION = Section(
 Phase("matrix", "Matrix", [
     InterviewItem(
         "dsa-guide-matrix",
-        "\ud83d\udcca Matrix \u2014 Time & Space Complexity Guide",
+        "[Guide] Matrix - Time & Space Complexity",
         "Matrix problems reduce to **O(rows \u00d7 cols)** traversal unless binary search on sorted matrix (**O(log(rows\u00d7cols))**). Use **layer-by-layer spiral**, **in-place row/col markers** for zero matrix, or **transpose + reverse** for rotation.\n\nSpace is usually **O(1)** when transforming in-place; BFS on matrix uses **O(rows\u00d7cols)** queue worst case.",
         "",
         "text",
@@ -402,8 +402,8 @@ Phase("matrix", "Matrix", [
 Phase("string", "String", [
     InterviewItem(
         "dsa-guide-string",
-        "\ud83d\udcca String \u2014 Time & Space Complexity Guide",
-        "String problems often use **sliding window** (O(n)) or **two pointers** for palindrome/substring tasks. Pattern matching: **KMP/Rabin-Karp** in O(n+m). Anagram problems use **frequency maps** of size alphabet.\n\nClarify whether input is Unicode or ASCII \u2014 alphabet size affects space in frequency arrays.",
+        "[Guide] String - Time & Space Complexity",
+        "String problems often use **sliding window** (O(n)) or **two pointers** for palindrome/substring tasks. Pattern matching: **KMP/Rabin-Karp** in O(n+m). Anagram problems use **frequency maps** of size alphabet.\n\nClarify whether input is Unicode or ASCII - alphabet size affects space in frequency arrays.",
         "",
         "text",
         key_points=['Sliding window: O(n) amortized', 'KMP: O(n + m) pattern search', 'Anagram: O(n) with freq map', 'Palindrome two-pointer: O(n)'],
@@ -498,9 +498,9 @@ Phase("string", "String", [
     ),
     InterviewItem(
         "dsa-450-string-012-split-the-binary-string-into-two-sub",
-        "Split the Binary string into two substring with equal 0\u2019s and 1\u2019s",
+        "Split the Binary string into two substring with equal 0's and 1's",
         "See detailed explanation.",
-        "// Split the Binary string into two substring with equal 0\u2019s and 1\u2019s",
+        "// Split the Binary string into two substring with equal 0's and 1's",
         "csharp",
         key_points=['Pattern: String processing', 'Time: O(n × m) worst (O(n) best)', 'Space: O(n) auxiliary'],
     ),
@@ -756,8 +756,8 @@ Phase("string", "String", [
 Phase("searching-sorting", "Searching & Sorting", [
     InterviewItem(
         "dsa-guide-searching-sorting",
-        "\ud83d\udcca Searching & Sorting \u2014 Time & Space Complexity Guide",
-        "**Binary search** requires sorted or monotonic predicate \u2014 **O(log n)**. Comparison sorts are **O(n log n)** lower bound. Linear search **O(n)** when unsorted.\n\nKnow merge sort (stable, O(n) extra), quicksort (in-place, O(log n) stack), counting/radix for bounded keys.",
+        "[Guide] Searching & Sorting - Time & Space Complexity",
+        "**Binary search** requires sorted or monotonic predicate - **O(log n)**. Comparison sorts are **O(n log n)** lower bound. Linear search **O(n)** when unsorted.\n\nKnow merge sort (stable, O(n) extra), quicksort (in-place, O(log n) stack), counting/radix for bounded keys.",
         "",
         "text",
         key_points=['Binary search: O(log n)', 'Merge/quick sort: O(n log n)', 'Counting sort: O(n + k) for range k', 'Search rotated array: modified BS'],
@@ -1054,8 +1054,8 @@ Phase("searching-sorting", "Searching & Sorting", [
 Phase("linked-list", "Linked List", [
     InterviewItem(
         "dsa-guide-linked-list",
-        "\ud83d\udcca Linked List \u2014 Time & Space Complexity Guide",
-        "Lists lack O(1) random access \u2014 expect **O(n)** scans. **Dummy nodes** simplify head deletion. **Fast/slow pointers** detect cycles and find mid in O(n) O(1). Reversal is **O(n)** iterative or recursive.\n\nRecursive solutions add **O(n) stack** \u2014 mention when comparing to iterative O(1) space.",
+        "[Guide] Linked List - Time & Space Complexity",
+        "Lists lack O(1) random access - expect **O(n)** scans. **Dummy nodes** simplify head deletion. **Fast/slow pointers** detect cycles and find mid in O(n) O(1). Reversal is **O(n)** iterative or recursive.\n\nRecursive solutions add **O(n) stack** - mention when comparing to iterative O(1) space.",
         "",
         "text",
         key_points=['Dummy head for edge cases', 'Floyd cycle: O(n) O(1)', 'Reverse in-place: O(n) O(1)', 'Merge sorted lists: O(n+m)'],
@@ -1126,9 +1126,9 @@ Phase("linked-list", "Linked List", [
     ),
     InterviewItem(
         "dsa-450-linked-list-009-add-1-to-a-number-represented-as-a-l",
-        "Add \u201c1\u201d to a number represented as a Linked List.",
+        "Add \"1\" to a number represented as a Linked List.",
         "See detailed explanation.",
-        "// Add \u201c1\u201d to a number represented as a Linked List.",
+        "// Add \"1\" to a number represented as a Linked List.",
         "csharp",
         key_points=['Pattern: Patience sorting / DP', 'Time: O(n log n) worst (O(n log n) best)', 'Space: O(n) auxiliary'],
     ),
@@ -1230,17 +1230,17 @@ Phase("linked-list", "Linked List", [
     ),
     InterviewItem(
         "dsa-450-linked-list-022-count-triplets-in-a-sorted-dll-whose",
-        "Count triplets in a sorted DLL whose sum is equal to given value \u201cX\u201d.",
+        "Count triplets in a sorted DLL whose sum is equal to given value \"X\".",
         "See detailed explanation.",
-        "// Count triplets in a sorted DLL whose sum is equal to given value \u201cX\u201d.",
+        "// Count triplets in a sorted DLL whose sum is equal to given value \"X\".",
         "csharp",
         key_points=['Pattern: Linked list pointers', 'Time: O(n) worst (O(n) best)', 'Space: O(1) auxiliary'],
     ),
     InterviewItem(
         "dsa-450-linked-list-023-sort-a-k-sorted-doubly-linked-list-v",
-        "Sort a \u201ck\u201dsorted Doubly Linked list.[Very IMP]",
+        "Sort a \"k\"sorted Doubly Linked list.[Very IMP]",
         "See detailed explanation.",
-        "// Sort a \u201ck\u201dsorted Doubly Linked list.[Very IMP]",
+        "// Sort a \"k\"sorted Doubly Linked list.[Very IMP]",
         "csharp",
         key_points=['Pattern: Patience sorting / DP', 'Time: O(n log n) worst (O(n log n) best)', 'Space: O(n) auxiliary'],
     ),
@@ -1334,9 +1334,9 @@ Phase("linked-list", "Linked List", [
     ),
     InterviewItem(
         "dsa-450-linked-list-035-program-for-n-th-node-from-the-end-o",
-        "Program for n\u2019th node from the end of a Linked List",
+        "Program for n'th node from the end of a Linked List",
         "See detailed explanation.",
-        "// Program for n\u2019th node from the end of a Linked List",
+        "// Program for n'th node from the end of a Linked List",
         "csharp",
         key_points=['Pattern: Patience sorting / DP', 'Time: O(n log n) worst (O(n log n) best)', 'Space: O(n) auxiliary'],
     ),
@@ -1352,7 +1352,7 @@ Phase("linked-list", "Linked List", [
 Phase("binary-trees", "Binary Trees", [
     InterviewItem(
         "dsa-guide-binary-trees",
-        "\ud83d\udcca Binary Trees \u2014 Time & Space Complexity Guide",
+        "[Guide] Binary Trees - Time & Space Complexity",
         "Tree traversals visit each node once \u2192 **O(n)**. Stack/queue space **O(h)** where h is height (O(n) skewed, O(log n) balanced).\n\n**Post-order** aggregates from children (height, diameter, max path). **BFS** gives level-order and shortest path in unweighted tree.",
         "",
         "text",
@@ -1642,8 +1642,8 @@ Phase("binary-trees", "Binary Trees", [
 Phase("bst", "Binary Search Trees", [
     InterviewItem(
         "dsa-guide-bst",
-        "\ud83d\udcca Binary Search Trees \u2014 Time & Space Complexity Guide",
-        "BST operations are **O(h)** \u2014 O(log n) balanced, O(n) skewed. **In-order traversal** yields sorted order. Validate with **global min/max bounds**, not parent-only check.\n\nDeletion has three cases: leaf, one child, two children (in-order successor).",
+        "[Guide] Binary Search Trees - Time & Space Complexity",
+        "BST operations are **O(h)** - O(log n) balanced, O(n) skewed. **In-order traversal** yields sorted order. Validate with **global min/max bounds**, not parent-only check.\n\nDeletion has three cases: leaf, one child, two children (in-order successor).",
         "",
         "text",
         key_points=['Search/insert/delete: O(h)', 'In-order = sorted', 'Validate with bounds', 'Self-balancing AVL/RB: O(log n) guaranteed'],
@@ -1828,8 +1828,8 @@ Phase("bst", "Binary Search Trees", [
 Phase("greedy", "Greedy", [
     InterviewItem(
         "dsa-guide-greedy",
-        "\ud83d\udcca Greedy \u2014 Time & Space Complexity Guide",
-        "Greedy picks locally optimal choice if **greedy choice property** and **optimal substructure** hold. Usually **O(n log n)** from sorting by key (intervals, activities).\n\nProve greediness or cite exchange argument \u2014 interviewers expect justification, not just code.",
+        "[Guide] Greedy - Time & Space Complexity",
+        "Greedy picks locally optimal choice if **greedy choice property** and **optimal substructure** hold. Usually **O(n log n)** from sorting by key (intervals, activities).\n\nProve greediness or cite exchange argument - interviewers expect justification, not just code.",
         "",
         "text",
         key_points=['Sort + scan: O(n log n)', 'Interval scheduling classic', 'Huffman: heap O(n log n)', 'Prove greedy choice property'],
@@ -2060,9 +2060,9 @@ Phase("greedy", "Greedy", [
     ),
     InterviewItem(
         "dsa-450-greedy-029-chocola-chocolate",
-        "CHOCOLA \u2013Chocolate",
+        "CHOCOLA -Chocolate",
         "See detailed explanation.",
-        "// CHOCOLA \u2013Chocolate",
+        "// CHOCOLA -Chocolate",
         "csharp",
         key_points=['Pattern: Greedy selection', 'Time: O(n log n) worst (O(n log n) best)', 'Space: O(1) auxiliary'],
     ),
@@ -2118,7 +2118,7 @@ Phase("greedy", "Greedy", [
 Phase("backtracking", "BackTracking", [
     InterviewItem(
         "dsa-guide-backtracking",
-        "\ud83d\udcca BackTracking \u2014 Time & Space Complexity Guide",
+        "[Guide] BackTracking - Time & Space Complexity",
         "Backtracking explores decision trees: subsets **O(2^n)**, permutations **O(n!)**. Prune early when partial solution cannot succeed (N-Queens, Sudoku).\n\nAuxiliary space **O(n)** for recursion depth and current path; output may dominate.",
         "",
         "text",
@@ -2190,9 +2190,9 @@ Phase("backtracking", "BackTracking", [
     ),
     InterviewItem(
         "dsa-450-backtracking-009-the-knight-s-tour-problem",
-        "The Knight\u2019s tour problem",
+        "The Knight's tour problem",
         "See detailed explanation.",
-        "// The Knight\u2019s tour problem",
+        "// The Knight's tour problem",
         "csharp",
         key_points=['Pattern: Backtracking', 'Time: O(n!) worst (O(2^n) best)', 'Space: O(n) auxiliary'],
     ),
@@ -2280,7 +2280,7 @@ Phase("backtracking", "BackTracking", [
 Phase("stack-queue", "Stacks & Queues", [
     InterviewItem(
         "dsa-guide-stack-queue",
-        "\ud83d\udcca Stacks & Queues \u2014 Time & Space Complexity Guide",
+        "[Guide] Stacks & Queues - Time & Space Complexity",
         "Stacks solve **LIFO** nesting and **monotonic next-greater/smaller** in **O(n) amortized**. Queues model BFS and sliding-window max with deque.\n\nMin-stack uses auxiliary structure for O(1) getMin at O(n) space cost.",
         "",
         "text",
@@ -2504,9 +2504,9 @@ Phase("stack-queue", "Stacks & Queues", [
     ),
     InterviewItem(
         "dsa-450-stack-queue-028-reverse-the-first-k-elements-of-a-qu",
-        "Reverse the first \u201cK\u201d elements of a queue",
+        "Reverse the first \"K\" elements of a queue",
         "See detailed explanation.",
-        "// Reverse the first \u201cK\u201d elements of a queue",
+        "// Reverse the first \"K\" elements of a queue",
         "csharp",
         key_points=['Pattern: Stack/queue simulation', 'Time: O(n) worst (O(n) best)', 'Space: O(n) auxiliary'],
     ),
@@ -2544,9 +2544,9 @@ Phase("stack-queue", "Stacks & Queues", [
     ),
     InterviewItem(
         "dsa-450-stack-queue-033-first-negative-integer-in-every-wind",
-        "First negative integer in every window of size \u201ck\u201d",
+        "First negative integer in every window of size \"k\"",
         "See detailed explanation.",
-        "// First negative integer in every window of size \u201ck\u201d",
+        "// First negative integer in every window of size \"k\"",
         "csharp",
         key_points=['Pattern: Stack/queue simulation', 'Time: O(n) worst (O(n) best)', 'Space: O(n) auxiliary'],
     ),
@@ -2560,17 +2560,17 @@ Phase("stack-queue", "Stacks & Queues", [
     ),
     InterviewItem(
         "dsa-450-stack-queue-035-sum-of-minimum-and-maximum-elements",
-        "Sum of minimum and maximum elements of all subarrays of size \u201ck\u201d.",
+        "Sum of minimum and maximum elements of all subarrays of size \"k\".",
         "See detailed explanation.",
-        "// Sum of minimum and maximum elements of all subarrays of size \u201ck\u201d.",
+        "// Sum of minimum and maximum elements of all subarrays of size \"k\".",
         "csharp",
         key_points=['Pattern: Stack/queue simulation', 'Time: O(n) worst (O(n) best)', 'Space: O(n) auxiliary'],
     ),
     InterviewItem(
         "dsa-450-stack-queue-036-minimum-sum-of-squares-of-character",
-        "Minimum sum of squares of character counts in a given string after removing \u201ck\u201d characters.",
+        "Minimum sum of squares of character counts in a given string after removing \"k\" characters.",
         "See detailed explanation.",
-        "// Minimum sum of squares of character counts in a given string after removing \u201ck\u201d ",
+        "// Minimum sum of squares of character counts in a given string after removing \"k\"",
         "csharp",
         key_points=['Pattern: Stack/queue simulation', 'Time: O(n) worst (O(n) best)', 'Space: O(n) auxiliary'],
     ),
@@ -2594,7 +2594,7 @@ Phase("stack-queue", "Stacks & Queues", [
 Phase("heap", "Heap", [
     InterviewItem(
         "dsa-guide-heap",
-        "\ud83d\udcca Heap \u2014 Time & Space Complexity Guide",
+        "[Guide] Heap - Time & Space Complexity",
         "Heaps give **O(log n)** insert/extract and **O(1)** peek. **Top-k** problems: min-heap size k \u2192 **O(n log k)**. Merge k sorted lists: heap of k heads \u2192 **O(n log k)**.\n\nTwo-heap median trick balances halves in O(log n) per add.",
         "",
         "text",
@@ -2626,9 +2626,9 @@ Phase("heap", "Heap", [
     ),
     InterviewItem(
         "dsa-450-heap-004-k-largest-element-in-an-array",
-        "\u201ck\u201d largest element in an array",
+        "\"k\" largest element in an array",
         "See detailed explanation.",
-        "// \u201ck\u201d largest element in an array",
+        "// \"k\" largest element in an array",
         "csharp",
         key_points=['Pattern: Heap operations', 'Time: O(n log n) worst (O(n log n) best)', 'Space: O(n) auxiliary'],
     ),
@@ -2642,9 +2642,9 @@ Phase("heap", "Heap", [
     ),
     InterviewItem(
         "dsa-450-heap-006-merge-k-sorted-arrays-imp",
-        "Merge \u201cK\u201d sorted arrays. [ IMP ]",
+        "Merge \"K\" sorted arrays. [ IMP ]",
         "See detailed explanation.",
-        "// Merge \u201cK\u201d sorted arrays. [ IMP ]",
+        "// Merge \"K\" sorted arrays. [ IMP ]",
         "csharp",
         key_points=['Pattern: Heap operations', 'Time: O(n log n) worst (O(n log n) best)', 'Space: O(n) auxiliary'],
     ),
@@ -2674,17 +2674,17 @@ Phase("heap", "Heap", [
     ),
     InterviewItem(
         "dsa-450-heap-010-merge-k-sorted-linked-lists-v-imp",
-        "Merge \u201cK\u201d Sorted Linked Lists [V.IMP]",
+        "Merge \"K\" Sorted Linked Lists [V.IMP]",
         "See detailed explanation.",
-        "// Merge \u201cK\u201d Sorted Linked Lists [V.IMP]",
+        "// Merge \"K\" Sorted Linked Lists [V.IMP]",
         "csharp",
         key_points=['Pattern: Merge lists / heap', 'Time: O(n + m) worst (O(n + m) best)', 'Space: O(1) auxiliary'],
     ),
     InterviewItem(
         "dsa-450-heap-011-smallest-range-in-k-lists",
-        "Smallest range in \u201cK\u201d Lists",
+        "Smallest range in \"K\" Lists",
         "See detailed explanation.",
-        "// Smallest range in \u201cK\u201d Lists",
+        "// Smallest range in \"K\" Lists",
         "csharp",
         key_points=['Pattern: Patience sorting / DP', 'Time: O(n log n) worst (O(n log n) best)', 'Space: O(n) auxiliary'],
     ),
@@ -2706,9 +2706,9 @@ Phase("heap", "Heap", [
     ),
     InterviewItem(
         "dsa-450-heap-014-connect-n-ropes-with-minimum-cost",
-        "Connect \u201cn\u201d ropes with minimum cost",
+        "Connect \"n\" ropes with minimum cost",
         "See detailed explanation.",
-        "// Connect \u201cn\u201d ropes with minimum cost",
+        "// Connect \"n\" ropes with minimum cost",
         "csharp",
         key_points=['Pattern: Heap operations', 'Time: O(n log n) worst (O(n log n) best)', 'Space: O(n) auxiliary'],
     ),
@@ -2748,7 +2748,7 @@ Phase("heap", "Heap", [
 Phase("graph", "Graph", [
     InterviewItem(
         "dsa-guide-graph",
-        "\ud83d\udcca Graph \u2014 Time & Space Complexity Guide",
+        "[Guide] Graph - Time & Space Complexity",
         "Adjacency-list BFS/DFS: **O(V + E)**. Grid graphs: **O(rows \u00d7 cols)**. **Topological sort** for dependencies; **Dijkstra** for non-negative shortest paths.\n\nUnion-Find for dynamic connectivity in near **O(\u03b1(n))** per operation.",
         "",
         "text",
@@ -2892,17 +2892,17 @@ Phase("graph", "Graph", [
     ),
     InterviewItem(
         "dsa-450-graph-018-implement-kruksal-salgorithm",
-        "Implement Kruksal\u2019sAlgorithm",
+        "Implement Kruksal'sAlgorithm",
         "See detailed explanation.",
-        "// Implement Kruksal\u2019sAlgorithm",
+        "// Implement Kruksal'sAlgorithm",
         "csharp",
         key_points=['Pattern: Graph BFS/DFS', 'Time: O(V + E) worst (O(V + E) best)', 'Space: O(V + E) auxiliary'],
     ),
     InterviewItem(
         "dsa-450-graph-019-implement-prim-s-algorithm",
-        "Implement Prim\u2019s Algorithm",
+        "Implement Prim's Algorithm",
         "See detailed explanation.",
-        "// Implement Prim\u2019s Algorithm",
+        "// Implement Prim's Algorithm",
         "csharp",
         key_points=['Pattern: Graph BFS/DFS', 'Time: O(V + E) worst (O(V + E) best)', 'Space: O(V + E) auxiliary'],
     ),
@@ -3094,7 +3094,7 @@ Phase("graph", "Graph", [
         "dsa-450-graph-043-minimise-the-cashflow-among-a-given",
         "Minimise the cashflow among a given set of friends who have borrowed money from each other",
         "See detailed explanation.",
-        "// Minimise the cashflow among a given set of friends who have borrowed money from ",
+        "// Minimise the cashflow among a given set of friends who have borrowed money from",
         "csharp",
         key_points=['Pattern: Graph BFS/DFS', 'Time: O(V + E) worst (O(V + E) best)', 'Space: O(V + E) auxiliary'],
     ),
@@ -3110,7 +3110,7 @@ Phase("graph", "Graph", [
 Phase("trie", "Trie", [
     InterviewItem(
         "dsa-guide-trie",
-        "\ud83d\udcca Trie \u2014 Time & Space Complexity Guide",
+        "[Guide] Trie - Time & Space Complexity",
         "Trie supports insert/search in **O(m)** per key of length m. Space **O(n \u00d7 m)** for n strings. Beats hash maps when **prefix queries** matter (autocomplete, word search).\n\nCompress paths (radix tree) if memory is tight.",
         "",
         "text",
@@ -3168,7 +3168,7 @@ Phase("trie", "Trie", [
 Phase("dp", "Dynamic Programming", [
     InterviewItem(
         "dsa-guide-dp",
-        "\ud83d\udcca Dynamic Programming \u2014 Time & Space Complexity Guide",
+        "[Guide] Dynamic Programming - Time & Space Complexity",
         "DP = optimal substructure + overlapping subproblems. 1D linear DP often **O(n) time O(1) space** (Fibonacci, house robber). 2D string DP **O(m \u00d7 n)**. Knapsack **O(n \u00d7 W)**.\n\nAlways state state definition, transition, base case, and iteration order.",
         "",
         "text",
@@ -3416,9 +3416,9 @@ Phase("dp", "Dynamic Programming", [
     ),
     InterviewItem(
         "dsa-450-dp-031-minimum-removals-from-array-to-make",
-        "Minimum removals from array to make max \u2013min <= K",
+        "Minimum removals from array to make max -min <= K",
         "See detailed explanation.",
-        "// Minimum removals from array to make max \u2013min <= K",
+        "// Minimum removals from array to make max -min <= K",
         "csharp",
         key_points=['Pattern: Dynamic programming', 'Time: O(n²) worst (O(n × W) best)', 'Space: O(W) auxiliary'],
     ),
@@ -3616,9 +3616,9 @@ Phase("dp", "Dynamic Programming", [
     ),
     InterviewItem(
         "dsa-450-dp-056-largest-area-rectangular-sub-matrix",
-        "Largest area rectangular sub-matrix with equal number of 1\u2019s and 0\u2019s [ IMP ]",
+        "Largest area rectangular sub-matrix with equal number of 1's and 0's [ IMP ]",
         "See detailed explanation.",
-        "// Largest area rectangular sub-matrix with equal number of 1\u2019s and 0\u2019s [ IMP ]",
+        "// Largest area rectangular sub-matrix with equal number of 1's and 0's [ IMP ]",
         "csharp",
         key_points=['Pattern: Dynamic programming', 'Time: O(n²) worst (O(n × W) best)', 'Space: O(W) auxiliary'],
     ),
@@ -3658,7 +3658,7 @@ Phase("dp", "Dynamic Programming", [
 Phase("bit-manipulation", "Bit Manipulation", [
     InterviewItem(
         "dsa-guide-bit-manipulation",
-        "\ud83d\udcca Bit Manipulation \u2014 Time & Space Complexity Guide",
+        "[Guide] Bit Manipulation - Time & Space Complexity",
         "Bit tricks run in **O(1)** or **O(log n)** word operations. **XOR** finds single unique; **n & (n-1)** clears lowest set bit (Brian Kernighan).\n\nPower set via bits: **O(2^n \u00d7 n)** to enumerate all subsets.",
         "",
         "text",

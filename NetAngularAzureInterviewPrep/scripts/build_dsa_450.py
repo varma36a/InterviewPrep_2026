@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import sys
 import textwrap
+import unicodedata
 from collections import defaultdict
 from pathlib import Path
 
@@ -40,8 +41,8 @@ def load_problems() -> list[dict]:
     df["topic"] = df["topic"].replace("", pd.NA).ffill()
     rows: list[dict] = []
     for _, r in df.iterrows():
-        topic = str(r["topic"]).strip()
-        problem = str(r["problem"]).strip()
+        problem = normalize_text(str(r["problem"]).strip())
+        topic = normalize_text(str(r["topic"]).strip())
         if not problem or topic == "nan":
             continue
         rows.append({"topic": topic, "problem": problem})
@@ -53,7 +54,24 @@ def make_id(phase_id: str, index: int, problem: str) -> str:
 
 
 def py_str(s: str) -> str:
-    return json.dumps(s, ensure_ascii=True)
+    return json.dumps(normalize_text(s), ensure_ascii=True)
+
+
+def normalize_text(s: str) -> str:
+    """Normalize punctuation from Excel exports to ASCII-friendly text."""
+    if not s:
+        return ""
+    s = unicodedata.normalize("NFKC", s)
+    return (
+        s.replace("\u2014", "-")
+        .replace("\u2013", "-")
+        .replace("\u2018", "'")
+        .replace("\u2019", "'")
+        .replace("\u201c", '"')
+        .replace("\u201d", '"')
+        .replace("\u00a0", " ")
+        .strip()
+    )
 
 
 def generate() -> tuple[int, int]:
@@ -80,7 +98,7 @@ def generate() -> tuple[int, int]:
 
         if guide:
             guide_id = f"dsa-guide-{phase_id}"
-            guide_title = f"📊 {guide['title']} — Time & Space Complexity Guide"
+            guide_title = f"[Guide] {guide['title']} - Time & Space Complexity"
             detailed_entries[guide_id] = {
                 "explanation": guide["explanation"],
                 "key_points": guide["key_points"],
